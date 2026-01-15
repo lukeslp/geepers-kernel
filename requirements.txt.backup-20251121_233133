@@ -1,0 +1,36 @@
+# Core dependencies (minimal - only for basic functionality)
+python-dotenv>=1.0.0
+
+# Provider dependencies (install as needed)
+# Install with: pip install -r requirements.txt
+# Or install specific provider: pip install anthropic openai
+
+# Anthropic (Claude)
+anthropic>=0.18.0
+
+# OpenAI (GPT) and xAI (Grok) - both use openai package
+openai>=1.0.0
+
+# Mistral
+requests>=2.31.0  # For Mistral API calls
+
+# Image processing (for vision and image generation)
+pillow>=11.3.0
+
+# Cohere
+cohere>=5.0.0
+
+# Google Gemini
+google-generativeai>=0.3.0
+
+# Perplexity - uses openai package with custom base_url
+
+# Redis (for memory module)
+redis>=5.0.0
+
+# OpenTelemetry (for observability)
+opentelemetry-api>=1.20.0
+opentelemetry-sdk>=1.20.0
+
+# Optional: Install all
+# pip install -e ".[all]"

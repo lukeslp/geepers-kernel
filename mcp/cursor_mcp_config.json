@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "dreamwalker": {
+      "command": "python3",
+      "args": [
+        "/home/coolhand/shared/mcp/mcp_http_bridge.py",
+        "--url",
+        "https://dr.eamer.dev/mcp"
+      ],
+      "env": {},
+      "description": "Dreamwalker MCP Server - 26 tools for orchestration, data fetching, caching, and utilities"
+    }
+  }
+}
+

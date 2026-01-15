@@ -1,0 +1,23 @@
+[Unit]
+Description=Monarch Money MCP Server
+After=network.target
+
+[Service]
+Type=simple
+User=coolhand
+WorkingDirectory=/home/coolhand/tools/monarchmoney
+ExecStart=/usr/bin/python3 /home/coolhand/tools/monarchmoney/mcp_server/http_server.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/coolhand/.mm
+
+[Install]
+WantedBy=multi-user.target

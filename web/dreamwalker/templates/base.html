@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IO Admin Panel</title>
+  <link rel="stylesheet" href="{{ base_path }}{{ url_for('static', filename='swiss-design.css') }}">
+  <link rel="stylesheet" href="{{ base_path }}{{ url_for('static', filename='dreamwalker.css') }}">
+</head>
+<body>
+  <header class="dw-header">
+    <div>
+      <h1>IO Admin Panel</h1>
+      <p class="dw-subtitle">Service control and orchestrator management</p>
+    </div>
+    <nav>
+      <a href="{{ base_path }}{{ url_for('dreamwalker_ui.dashboard') }}">Dashboard</a>
+      {% for key, orchestrator in orchestrators.items() %}
+        <a href="{{ base_path }}{{ url_for('dreamwalker_ui.orchestrator_detail', name=key) }}">
+          {{ orchestrator.label or key|title }}
+        </a>
+      {% endfor %}
+      <a href="{{ base_path }}{{ url_for('dreamwalker_ui.settings_form') }}">Settings</a>
+    </nav>
+  </header>
+  <main class="dw-container">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="dw-footer">
+    <small>MCP Base URL: {{ mcp_url }}</small>
+  </footer>
+</body>
+</html>

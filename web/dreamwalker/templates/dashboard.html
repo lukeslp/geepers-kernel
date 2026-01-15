@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="dw-card-grid">
+    <article class="dw-card">
+      <h2>Health</h2>
+      {% if health_error %}
+        <div class="dw-alert">{{ health_error }}</div>
+      {% else %}
+        <p>Status: <span class="dw-pill">{{ health.status or 'unknown' }}</span></p>
+        <p>Uptime: {{ health.uptime or 'n/a' }}</p>
+      {% endif %}
+    </article>
+    <article class="dw-card">
+      <h2>Patterns</h2>
+      {% if patterns_error %}
+        <div class="dw-alert">{{ patterns_error }}</div>
+      {% else %}
+        <ul>
+          {% for pattern in patterns.patterns or [] %}
+            <li><strong>{{ pattern.name }}</strong> · {{ pattern.description }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </article>
+    <article class="dw-card">
+      <h2>Resources</h2>
+      {% if resources_error %}
+        <div class="dw-alert">{{ resources_error }}</div>
+      {% else %}
+        <p>{{ resources.resources|length }} available</p>
+      {% endif %}
+    </article>
+  </section>
+
+  <section class="dw-card" style="margin-top:2rem;">
+    <h2>Tools</h2>
+    {% if tools_error %}
+      <div class="dw-alert">{{ tools_error }}</div>
+    {% else %}
+      <table class="dw-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tool in tools.tools %}
+            <tr>
+              <td>{{ tool.name }}</td>
+              <td>{{ tool.description }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </section>
+{% endblock %}

@@ -1,0 +1,78 @@
+/**
+ * Swiss Design System for Dreamwalker/IO Admin
+ * Replaces space theme with Swiss design
+ * Credits: Luke Steuber
+ */
+
+/* Import base Swiss design */
+@import url('https://dr.eamer.dev/design/swiss/swiss-design.css');
+
+/* Admin-specific Swiss styling */
+:root {
+  /* Use Swiss black/white/red palette */
+  --admin-primary: var(--swiss-red);
+  --admin-bg: var(--swiss-white);
+  --admin-fg: var(--swiss-black);
+  --admin-border: var(--swiss-gray-300);
+}
+
+[data-theme="dark"] {
+  --admin-bg: var(--swiss-black);
+  --admin-fg: var(--swiss-white);
+  --admin-border: var(--swiss-gray-700);
+}
+
+/* Override Dreamwalker's space theme */
+body {
+  background: var(--admin-bg) !important;
+  color: var(--admin-fg) !important;
+  font-family: var(--swiss-font-sans) !important;
+}
+
+/* Remove space gradients */
+* {
+  background-image: none !important;
+}
+
+/* Swiss typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--swiss-font-sans) !important;
+  font-weight: var(--swiss-weight-bold) !important;
+  letter-spacing: var(--swiss-tracking-tight) !important;
+}
+
+/* Swiss buttons */
+button,
+.btn,
+a.btn {
+  font-family: var(--swiss-font-sans) !important;
+  text-transform: uppercase !important;
+  letter-spacing: var(--swiss-tracking-wide) !important;
+  border-radius: 0 !important;
+  font-weight: var(--swiss-weight-medium) !important;
+}
+
+/* Swiss inputs */
+input,
+textarea,
+select {
+  border-radius: 0 !important;
+  font-family: var(--swiss-font-sans) !important;
+  border: var(--swiss-border-width) solid var(--admin-border) !important;
+}
+
+/* Swiss cards/panels */
+.card,
+.panel,
+.dw-card {
+  border-radius: 0 !important;
+  border: var(--swiss-border-width) solid var(--admin-border) !important;
+  background: var(--admin-bg) !important;
+}
+
+/* Swiss header */
+.dw-header {
+  border-bottom: var(--swiss-border-width-thick) solid var(--admin-fg) !important;
+  background: var(--admin-bg) !important;
+}
+

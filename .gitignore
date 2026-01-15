@@ -1,0 +1,210 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+mcp/venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+*.db
+
+# Process files
+*.pid
+*.lock
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+*.key
+*_keys.txt
+API_KEYS.md
+
+# Backup files
+*.bak
+*.backup
+*.old
+.backups/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Documentation builds
+docs/_build/
+
+# State files
+*.json.bak
+state_backup.json
+
+# Claude specific
+.claude/
+
+# AI CODING ASSISTANTS & IDE ARTIFACTS
+# ============================================================================
+# This template ensures AI tool evidence is properly concealed from version control
+# Add these patterns to project .gitignore files for comprehensive coverage
+
+# Claude Code (Anthropic)
+.claude/
+.claude.json
+.claude.json.backup
+*.claude.backup
+
+# Cursor AI
+.cursor/
+.cursor-server/
+.cursorignore
+.cursorindexingignore
+
+# GitHub Copilot
+.github/copilot/
+
+# Aider AI
+.aider/
+.aider.conf.yml
+.aider.tags.cache.v3/
+
+# Continue AI
+.continue/
+
+# Tabnine AI
+.tabnine/
+
+# Codeium AI
+.codeium/
+
+# Windsurf AI (Codeium-based)
+.windsurf/
+
+# Bolt AI
+.bolt/
+
+# Replit AI
+.replit
+.replit.nix
+.replitrc
+
+# Codex (OpenAI)
+.codex/
+
+# Serena AI
+.serena/
+
+# Warp Terminal AI features
+.warp/
+
+# Sourcegraph Cody
+.cody/
+
+# TabbyML
+.tabby/
+
+# Generic AI assistant patterns
+*-ai-context.json
+*-ai-session.json
+.ai-context/
+.llm-context/
+
+# ============================================================================
+# AI-GENERATED ARTIFACTS
+# ============================================================================
+# Prompts, conversations, and generated code markers
+
+# Prompt files and conversations
+*.prompt.txt
+*.conversation.json
+.prompts/
+.conversations/
+
+# AI-generated code markers (some tools add these)
+*_generated_by_ai.py
+*_ai_generated.*
+*.ai-generated
+
+# Code review AI artifacts
+.ai-review/
+*.ai-review.json
+
+# ============================================================================
+# AI TOOL LOGS AND CACHES
+# ============================================================================
+
+# Tool-specific logs
+.aider.log
+.cursor.log
+.copilot.log
+
+# AI tool caches
+.ai-cache/
+.llm-cache/
+.completion-cache/
+
+# ============================================================================
+# IDE AND EDITOR BACKUP FILES (may contain AI suggestions)
+# ============================================================================
+
+# Backup files that may contain AI-generated content
+*.bak
+*.backup
+*.backup_*
+*_backup_*
+*.old
+*.orig
+*.save
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/

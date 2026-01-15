@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="dw-card">
+    <h2>Configuration</h2>
+    <p>Dreamwalker reads MCP settings from environment variables.</p>
+    <ul>
+      <li><code>MCP_BASE_URL</code> (current: {{ mcp_url }})</li>
+      <li><code>DREAMWALKER_API_KEY</code> (set: {{ 'yes' if current_app.config.get('DREAMWALKER_API_KEY') else 'no' }})</li>
+    </ul>
+    <p>Update <code>.env</code> or service manager values to change them.</p>
+  </section>
+{% endblock %}

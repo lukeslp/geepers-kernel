@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="dw-card">
+    <h2>{{ orchestrator.label }}</h2>
+    <p>{{ orchestrator.description }}</p>
+    {% if pattern %}
+      <p><strong>Default agents:</strong> {{ pattern.default_agents }}</p>
+      <p><strong>Capabilities:</strong> {{ pattern.capabilities|join(', ') }}</p>
+    {% endif %}
+  </section>
+
+  <section class="dw-card" style="margin-top:2rem;">
+    <h3>Launch Workflow</h3>
+    <form id="launch-form">
+      <input type="hidden" name="orchestrator" value="{{ orchestrator.slug or orchestrator.label|lower }}">
+      <label>Task / Query</label>
+      <textarea name="task" rows="4" placeholder="Research objective"></textarea>
+      <label>Agent Count</label>
+      <input type="number" name="num_agents" min="1" max="20" value="5">
+      <label>Enable Synthesis</label>
+      <select name="enable_synthesis">
+        <option value="true" selected>Yes</option>
+        <option value="false">No</option>
+      </select>
+      <button type="submit">Start {{ orchestrator.label }}</button>
+    </form>
+    <pre id="launch-output"></pre>
+  </section>
+
+  <script>
+  const basePath = {{ base_path|tojson }} || '';
+  const form = document.getElementById('launch-form');
+  const output = document.getElementById('launch-output');
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const payload = {
+      orchestrator: formData.get('orchestrator'),
+      payload: {
+        task: formData.get('task'),
+        query: formData.get('task'),
+        num_agents: Number(formData.get('num_agents')),
+        enable_synthesis: formData.get('enable_synthesis') === 'true',
+      }
+    };
+    output.textContent = 'Launching...';
+    try {
+      const response = await fetch(`${basePath}/api/orchestrations`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      output.textContent = JSON.stringify(result, null, 2);
+    } catch (error) {
+      output.textContent = error;
+    }
+  });
+  </script>
+{% endblock %}

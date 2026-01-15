@@ -1,0 +1,204 @@
+#!/usr/bin/env python3
+"""Start the shared MCP orchestrator server over stdio for Codex/Claude."""
+
+import asyncio
+import json
+import logging
+import os
+import sys
+import threading
+from pathlib import Path
+from typing import Any, Dict, Optional
+
+REPO_ROOT = Path(__file__).resolve().parent
+SHARED_PATH = REPO_ROOT / "shared"
+if str(SHARED_PATH) not in sys.path:
+    sys.path.insert(0, str(SHARED_PATH))
+
+from mcp import UnifiedMCPServer  # type: ignore
+
+LOG_DIR = Path.home() / ".codex" / "log"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+LOG_FILE = LOG_DIR / "mcp-orchestrator.log"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler(LOG_FILE, encoding="utf-8"),
+    ]
+)
+logger = logging.getLogger("mcp-orchestrator")
+
+
+class OrchestratorMCPServer:
+    """STDIO MCP bridge that exposes UnifiedMCPServer tools."""
+
+    def __init__(self) -> None:
+        self.loop = asyncio.new_event_loop()
+        self.loop_thread = threading.Thread(target=self._run_loop, daemon=True)
+        self.loop_thread.start()
+        self.server = UnifiedMCPServer()
+        self.tool_handlers = self._discover_tool_handlers()
+        logger.info("Unified MCP server initialized with %s tools", len(self.tool_handlers))
+
+    def _run_loop(self) -> None:
+        asyncio.set_event_loop(self.loop)
+        self.loop.run_forever()
+
+    def _discover_tool_handlers(self) -> Dict[str, Any]:
+        handlers: Dict[str, Any] = {}
+        for tool in self.server.get_tools_manifest():
+            name = tool.get("name")
+            method = getattr(self.server, f"tool_{name}", None)
+            if callable(method):
+                handlers[name] = method
+        return handlers
+
+    def _run_coro(self, coro: Any) -> Any:
+        future = asyncio.run_coroutine_threadsafe(coro, self.loop)
+        return future.result()
+
+    def _call_tool(self, name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
+        handler = self.tool_handlers.get(name)
+        if not handler:
+            raise ValueError(f"Unknown tool: {name}")
+        result = self._run_coro(handler(arguments))
+        text_summary = json.dumps(result, indent=2)
+        return {
+            "content": [
+                {
+                    "type": "text",
+                    "text": text_summary
+                }
+            ],
+            "isError": not result.get("success", True)
+        }
+
+    def _call_resource(self, uri: str) -> Dict[str, Any]:
+        if uri.endswith("/info"):
+            coro = self.server.resource_orchestrator_info(uri)
+        elif uri.endswith("/status"):
+            coro = self.server.resource_workflow_status(uri)
+        elif uri.endswith("/results"):
+            coro = self.server.resource_workflow_results(uri)
+        else:
+            raise ValueError(f"Unsupported resource URI: {uri}")
+
+        data = self._run_coro(coro)
+        return {
+            "contents": [
+                {
+                    "uri": uri,
+                    "mimeType": "application/json",
+                    "text": json.dumps(data, indent=2)
+                }
+            ]
+        }
+
+    def handle_request(self, message: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        method = message.get("method")
+        msg_id = message.get("id")
+        params = message.get("params", {})
+
+        if method == "initialize":
+            result = {
+                "protocolVersion": "2024-11-05",
+                "serverInfo": {
+                    "name": "shared-mcp-orchestrator",
+                    "version": "1.0.0"
+                },
+                "capabilities": {
+                    "tools": {},
+                    "resources": {}
+                }
+            }
+            return self._build_response(msg_id, result)
+
+        if method == "tools/list":
+            result = {"tools": self.server.get_tools_manifest()}
+            return self._build_response(msg_id, result)
+
+        if method == "tools/call":
+            tool_name = params.get("name")
+            arguments = params.get("arguments", {})
+            if not tool_name:
+                raise ValueError("tools/call requires a name")
+            payload = self._call_tool(tool_name, arguments)
+            return self._build_response(msg_id, payload)
+
+        if method == "resources/list":
+            result = {"resources": self.server.get_resources_manifest()}
+            return self._build_response(msg_id, result)
+
+        if method == "resources/read":
+            uri = params.get("uri")
+            if not uri:
+                raise ValueError("resources/read requires uri")
+            payload = self._call_resource(uri)
+            return self._build_response(msg_id, payload)
+
+        if method == "notifications/initialized":
+            return None
+
+        if method == "shutdown":
+            logger.info("Received shutdown notification")
+            asyncio.run_coroutine_threadsafe(self._stop(), self.loop)
+            return self._build_response(msg_id, {"ok": True})
+
+        raise ValueError(f"Unsupported method: {method}")
+
+    async def _stop(self) -> None:
+        self.loop.stop()
+
+    @staticmethod
+    def _build_response(msg_id: Any, result: Dict[str, Any]) -> Dict[str, Any]:
+        return {
+            "jsonrpc": "2.0",
+            "id": msg_id,
+            "result": result
+        }
+
+
+def main() -> int:
+    server = OrchestratorMCPServer()
+    logger.info("MCP STDIO bridge started")
+
+    try:
+        for raw_line in sys.stdin:
+            line = raw_line.strip()
+            if not line:
+                continue
+            try:
+                message = json.loads(line)
+            except json.JSONDecodeError as exc:
+                logger.error("Invalid JSON payload: %s", exc)
+                continue
+
+            try:
+                response = server.handle_request(message)
+            except Exception as exc:  # noqa: BLE001
+                logger.exception("Failed to handle request: %s", exc)
+                error = {
+                    "jsonrpc": "2.0",
+                    "id": message.get("id"),
+                    "error": {
+                        "code": -32000,
+                        "message": str(exc)
+                    }
+                }
+                sys.stdout.write(json.dumps(error) + "\n")
+                sys.stdout.flush()
+                continue
+
+            if response is not None:
+                sys.stdout.write(json.dumps(response) + "\n")
+                sys.stdout.flush()
+    except KeyboardInterrupt:
+        logger.info("MCP STDIO bridge interrupted")
+    finally:
+        return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

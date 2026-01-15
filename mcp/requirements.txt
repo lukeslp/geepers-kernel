@@ -1,0 +1,18 @@
+# MCP Orchestrator Server Requirements
+# Author: Luke Steuber
+
+# Core dependencies
+flask>=3.0.0
+flask-cors>=4.0.0
+gunicorn>=21.0.0
+
+# Async support
+aiohttp>=3.9.0
+gevent>=24.0.0  # Required for Flask async workers (greenlet-based concurrency)
+
+# Document generation (optional - gracefully handled if missing)
+reportlab>=4.0.0
+python-docx>=1.0.0
+
+# Shared library dependencies
+-e /home/coolhand/shared
