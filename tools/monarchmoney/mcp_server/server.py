@@ -18,7 +18,7 @@ from mcp.server.stdio import stdio_server
 from mcp.types import Tool, TextContent
 
 # Monarch Money imports
-sys.path.insert(0, '/home/coolhand/tools/monarchmoney')
+sys.path.insert(0, '/home/coolhand/shared/tools/monarchmoney')
 from monarchmoney.monarchmoney import MonarchMoney
 from monarchmoney.logger import logger
 

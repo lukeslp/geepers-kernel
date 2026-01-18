@@ -21,7 +21,7 @@ class SecureSessionManager:
     The encryption key is stored in a separate file with restricted permissions.
     """
 
-    def __init__(self, session_dir: str = ".mm"):
+    def __init__(self, session_dir: str = "~/.mm"):
         """
         Initialize the secure session manager.
 
