@@ -22,7 +22,7 @@ AUTH_HEADER_KEY = "authorization"
 CSRF_KEY = "csrftoken"
 DEFAULT_RECORD_LIMIT = 100
 ERRORS_KEY = "error_code"
-SESSION_DIR = ".mm"
+SESSION_DIR = os.path.expanduser("~/.mm")
 SESSION_FILE = f"{SESSION_DIR}/mm_session.pickle"
 
 
