@@ -41,16 +41,19 @@ _pypi_mcp_modules = {
 }
 
 # ---------------------------------------------------------------------------
-# Now add ~/shared to path and load our local modules
+# Now add ~/shared to path and load our local modules.
+# Temporarily remove PyPI mcp from sys.modules so Python finds our local one.
 # ---------------------------------------------------------------------------
 sys.path.insert(0, '/home/coolhand/shared')
+
+# Remove PyPI mcp temporarily so `from mcp.xxx` finds our local package
+for k in list(_pypi_mcp_modules):
+    sys.modules.pop(k, None)
 
 from config import ConfigManager
 from mcp.unified_server import UnifiedMCPServer
 
-# ---------------------------------------------------------------------------
 # Restore PyPI mcp modules so fastmcp continues to work at runtime
-# ---------------------------------------------------------------------------
 sys.modules.update(_pypi_mcp_modules)
 
 logging.basicConfig(
