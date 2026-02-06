@@ -8,7 +8,7 @@ Delegates all tool calls to the existing UnifiedMCPServer class.
 Secured with bearer token auth via Starlette middleware.
 
 Port: 5061
-Caddy route: https://dr.eamer.dev/mcp/
+Caddy route: https://dr.eamer.dev/mcp-remote/
 
 Author: Luke Steuber
 """
@@ -26,9 +26,7 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env'))
 
 # ---------------------------------------------------------------------------
-# Import fastmcp FIRST (needs PyPI `mcp` package from venv site-packages).
-# We must NOT have ~/shared on sys.path yet, or `mcp` resolves to our local
-# ~/shared/mcp/ package instead of the PyPI one.
+# Import fastmcp FIRST while sys.path is clean (no ~/shared shadowing PyPI mcp)
 # ---------------------------------------------------------------------------
 from fastmcp import FastMCP
 from starlette.middleware import Middleware
@@ -36,36 +34,24 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
+# Save reference to PyPI mcp modules (loaded by fastmcp)
+_pypi_mcp_modules = {
+    k: v for k, v in sys.modules.items()
+    if k == 'mcp' or k.startswith('mcp.')
+}
+
 # ---------------------------------------------------------------------------
-# Now load our local modules. We add ~/shared to path for transitive deps
-# (orchestration, llm_providers, config, etc.). To avoid colliding with
-# the PyPI `mcp` already in sys.modules, we load our local mcp package
-# under the name `dreamwalker_mcp` using importlib.
+# Now add ~/shared to path and load our local modules
 # ---------------------------------------------------------------------------
 sys.path.insert(0, '/home/coolhand/shared')
 
 from config import ConfigManager
+from mcp.unified_server import UnifiedMCPServer
 
-# Load our local mcp package under a non-colliding name
-_mcp_init = os.path.join('/home/coolhand/shared/mcp', '__init__.py')
-_mcp_spec = importlib.util.spec_from_file_location(
-    'dreamwalker_mcp', _mcp_init,
-    submodule_search_locations=['/home/coolhand/shared/mcp']
-)
-_dmcp = importlib.util.module_from_spec(_mcp_spec)
-sys.modules['dreamwalker_mcp'] = _dmcp
-_mcp_spec.loader.exec_module(_dmcp)
-
-# Load unified_server as a submodule
-_us_spec = importlib.util.spec_from_file_location(
-    'dreamwalker_mcp.unified_server',
-    os.path.join('/home/coolhand/shared/mcp', 'unified_server.py')
-)
-_us_mod = importlib.util.module_from_spec(_us_spec)
-sys.modules['dreamwalker_mcp.unified_server'] = _us_mod
-_us_spec.loader.exec_module(_us_mod)
-
-UnifiedMCPServer = _us_mod.UnifiedMCPServer
+# ---------------------------------------------------------------------------
+# Restore PyPI mcp modules so fastmcp continues to work at runtime
+# ---------------------------------------------------------------------------
+sys.modules.update(_pypi_mcp_modules)
 
 logging.basicConfig(
     level=logging.INFO,
