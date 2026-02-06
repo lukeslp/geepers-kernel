@@ -121,7 +121,7 @@ class TestInsightsCommand:
         """Test insights help displays."""
         result = self.runner.invoke(cli, ['insights', '--help'])
         assert result.exit_code == 0
-        assert 'AI-powered financial insights' in result.output
+        assert 'LLM-powered financial insights' in result.output
 
     def test_insights_ask_help(self):
         """Test insights ask help."""

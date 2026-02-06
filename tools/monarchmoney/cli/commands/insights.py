@@ -20,7 +20,7 @@ console = Console()
 
 @click.group()
 def insights():
-    """Get AI-powered financial insights."""
+    """Get LLM-powered financial insights."""
     pass
 
 
