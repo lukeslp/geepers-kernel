@@ -236,7 +236,7 @@ async def dreamwalker_execute_tool(
 # ---------------------------------------------------------------------------
 
 app = mcp_server.http_app(
-    path="/mcp",
+    path="/",
     transport="streamable-http",
     middleware=[Middleware(BearerAuthMiddleware)],
 )
