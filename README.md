@@ -1,17 +1,17 @@
 # dr-eamer-ai-shared
 
-**Unified AI Development Infrastructure**
+**Unified LLM Development Infrastructure**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-
-> Transform Claude Code from a chatbot into a coordinated multi-agent research team.
+[![PyPI: dr-eamer-ai-shared](https://img.shields.io/badge/PyPI-dr--eamer--ai--shared-orange.svg)](https://pypi.org/project/dr-eamer-ai-shared/)
+[![Status: Production](https://img.shields.io/badge/status-production-brightgreen.svg)]()
 
 ---
 
 ## Overview
 
-`dr-eamer-ai-shared` is the foundational library powering the Dreamwalker MCP ecosystem. It provides:
+`dr-eamer-ai-shared` is the foundational library powering the Dreamwalker MCP ecosystem. (The package name predates our naming conventions.) It provides:
 
 - **10+ LLM Providers** — Unified interface for Anthropic, OpenAI, xAI, Mistral, Cohere, Gemini, Perplexity, Groq, and more
 - **Multi-Agent Orchestration** — Dream Cascade (hierarchical research) and Dream Swarm (parallel search) patterns
@@ -20,7 +20,7 @@
 - **Document Generation** — Professional PDF, DOCX, and Markdown output with citations
 
 **Status:** Production-ready, actively developed  
-**Package Name:** `dr-eamer-ai-shared` *(preparing for PyPI publication)*  
+**Package Name:** `dr-eamer-ai-shared` *(published on PyPI)*  
 **Documentation:** [dr.eamer.dev/dreamwalker](https://dr.eamer.dev/dreamwalker/)
 
 ---
@@ -69,7 +69,7 @@ orchestrator = DreamCascadeOrchestrator(
 )
 
 result = await orchestrator.execute(
-    task="Comprehensive analysis of AI safety research 2023-2025",
+    task="Comprehensive analysis of LLM safety research 2023-2025",
     enable_drummer=True,  # Mid-level synthesis
     enable_camina=True    # Executive summary
 )
@@ -349,7 +349,7 @@ pre-commit run --all-files
 
 ## Contributing
 
-We welcome contributions! Please:
+Contributions welcome! Please:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -359,7 +359,7 @@ We welcome contributions! Please:
 6. Run tests: `pytest tests/`
 7. Submit a Pull Request
 
-**Areas We Need Help:**
+**Areas that could use help:**
 - New orchestrator patterns (graph-based, recursive, hybrid)
 - Additional data sources (more API clients)
 - Provider integrations (new LLM providers)
@@ -410,7 +410,7 @@ Built with:
 
 ---
 
-**Remember:** Orchestration > Individual tools. Deploy a research team, not just a chatbot.
+
 
 
 
