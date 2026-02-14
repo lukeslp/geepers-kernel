@@ -54,17 +54,27 @@ class AnthropicProvider(BaseLLMProvider):
 
     def complete(self, messages: List[Message], **kwargs) -> CompletionResponse:
         """Generate a completion using Claude."""
-        formatted_messages = [
-            {"role": msg.role, "content": msg.content}
-            for msg in messages
-        ]
+        # Anthropic requires system messages as a top-level parameter, not in messages
+        system_parts = []
+        formatted_messages = []
+        for msg in messages:
+            if msg.role == "system":
+                system_parts.append(msg.content)
+            else:
+                formatted_messages.append({"role": msg.role, "content": msg.content})
 
-        response = self.client.messages.create(
-            model=kwargs.get("model", self.model),
-            messages=formatted_messages,
-            max_tokens=kwargs.get("max_tokens", 1024),
-            **{k: v for k, v in kwargs.items() if k not in ["model", "max_tokens"]}
-        )
+        create_kwargs = {
+            "model": kwargs.get("model", self.model),
+            "messages": formatted_messages,
+            "max_tokens": kwargs.get("max_tokens", 1024),
+            **{k: v for k, v in kwargs.items() if k not in ["model", "max_tokens", "system"]}
+        }
+        if system_parts:
+            create_kwargs["system"] = "\n\n".join(system_parts)
+        elif "system" in kwargs:
+            create_kwargs["system"] = kwargs["system"]
+
+        response = self.client.messages.create(**create_kwargs)
 
         return CompletionResponse(
             content=response.content[0].text,
@@ -79,16 +89,26 @@ class AnthropicProvider(BaseLLMProvider):
 
     def stream_complete(self, messages: List[Message], **kwargs):
         """Stream a completion using Claude."""
-        formatted_messages = [
-            {"role": msg.role, "content": msg.content}
-            for msg in messages
-        ]
+        # Anthropic requires system messages as a top-level parameter, not in messages
+        system_parts = []
+        formatted_messages = []
+        for msg in messages:
+            if msg.role == "system":
+                system_parts.append(msg.content)
+            else:
+                formatted_messages.append({"role": msg.role, "content": msg.content})
 
-        with self.client.messages.stream(
-            model=kwargs.get("model", self.model),
-            messages=formatted_messages,
-            max_tokens=kwargs.get("max_tokens", 1024),
-        ) as stream:
+        stream_kwargs = {
+            "model": kwargs.get("model", self.model),
+            "messages": formatted_messages,
+            "max_tokens": kwargs.get("max_tokens", 1024),
+        }
+        if system_parts:
+            stream_kwargs["system"] = "\n\n".join(system_parts)
+        elif "system" in kwargs:
+            stream_kwargs["system"] = kwargs["system"]
+
+        with self.client.messages.stream(**stream_kwargs) as stream:
             for text in stream.text_stream:
                 yield text
 
