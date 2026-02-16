@@ -1,6 +1,6 @@
 # dr-eamer-ai-shared
 
-**Unified LLM Development Infrastructure**
+Shared library for LLM providers, multi-agent orchestration, and data fetching.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -11,7 +11,7 @@
 
 ## Overview
 
-`dr-eamer-ai-shared` is the foundational library powering the Dreamwalker MCP ecosystem. (The package name predates our naming conventions.) It provides:
+`dr-eamer-ai-shared` is the shared library behind all the LLM tooling on dr.eamer.dev. (The package name predates current naming conventions.) It provides:
 
 - **10+ LLM Providers** — Unified interface for Anthropic, OpenAI, xAI, Mistral, Cohere, Gemini, Perplexity, Groq, and more
 - **Multi-Agent Orchestration** — Dream Cascade (hierarchical research) and Dream Swarm (parallel search) patterns
@@ -395,18 +395,12 @@ SOFTWARE.
 
 ---
 
-## Acknowledgments
+## Author
 
-Built with:
-- [Model Context Protocol](https://modelcontextprotocol.io/) by Anthropic
-- [Claude](https://www.anthropic.com/) by Anthropic
-- [OpenAI GPT](https://openai.com/)
-- [xAI Grok](https://x.ai/)
-- And many other open-source libraries (see `requirements.txt`)
-
-**Author:** Luke Steuber  
-**Repository:** [github.com/lukeslp/kernel](https://github.com/lukeslp/kernel)  
-**Website:** [dr.eamer.dev](https://dr.eamer.dev)
+Luke Steuber
+- [dr.eamer.dev](https://dr.eamer.dev)
+- [github.com/lukeslp](https://github.com/lukeslp)
+- [lukesteuber.com](https://lukesteuber.com)
 
 ---
 
