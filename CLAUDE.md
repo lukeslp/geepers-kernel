@@ -78,6 +78,9 @@ config.py ───────────────────────�
     │       ├── cache_server.py ──────────────────── Response caching
     │       └── streaming.py + background_loop.py ── SSE streaming + async execution
     │
+    ├── remote_mcp/  ── server.py (port 5061) ──── FastMCP wrapper for remote HTTP/Streamable access
+    │       └── Caddy route: /mcp-remote/ ──────── Claude Desktop Custom Connector endpoint
+    │
     ├── web/  ── Flask components ────────────────── Reusable Flask blueprints and middleware
     │       ├── llm_proxy_blueprint.py ───────────── Unified LLM proxy (POST /complete, /stream, /vision)
     │       ├── universal_proxy.py ───────────────── Generic HTTP proxy
@@ -146,6 +149,7 @@ from web import create_health_endpoint, setup_cors
 | Service | Port |
 |---------|------|
 | MCP Server (unified_server.py) | 5060 |
+| Remote MCP Server (remote_mcp/server.py) | 5061 |
 | Dreamwalker UI | 5080 |
 | Dev/Testing | 5010-5019, 5050-5059 |
 
