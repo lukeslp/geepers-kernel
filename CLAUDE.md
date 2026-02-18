@@ -29,7 +29,7 @@ cd /home/coolhand/shared/mcp && python unified_server.py   # Port 5060
 
 ## Overview
 
-Python library published as **`geepers-core`** (PyPI, v1.0.2). Previously `dr-eamer-ai-shared` - the README still uses the old name. Provides reusable LLM, orchestration, data fetching, and web infrastructure for all projects on dr.eamer.dev.
+Python library published as **`geepers-core`** (PyPI, v1.0.2). Previously `dr-eamer-ai-shared`. `setup.py` has been removed — `pyproject.toml` is the sole build config. Provides reusable LLM, orchestration, data fetching, and web infrastructure for all projects on dr.eamer.dev.
 
 **Each module has its own CLAUDE.md** with detailed API docs and code examples. This file covers cross-cutting architecture and what you need to know across modules.
 
