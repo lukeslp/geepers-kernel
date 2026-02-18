@@ -31,7 +31,19 @@ class PerplexityProvider(BaseLLMProvider):
             raise ImportError("openai package is required. Install with: pip install openai")
 
     def complete(self, messages: List[Message], **kwargs) -> CompletionResponse:
-        """Generate a completion using Perplexity."""
+        """Generate a completion using Perplexity.
+
+        Perplexity-specific search parameters can be passed as kwargs and are
+        forwarded directly to the API alongside the standard OpenAI params:
+            search_recency_filter: "day"|"week"|"month"|"year"
+            search_domain_filter: list of domains to include/exclude
+            search_language_filter: list of ISO 639-1 language codes
+            search_after_date_filter: "MM/DD/YYYY"
+            search_before_date_filter: "MM/DD/YYYY"
+            search_mode: "academic"|"sec"
+            disable_search: bool
+            web_search_options: dict with search_context_size + user_location
+        """
         formatted_messages = [
             {"role": msg.role, "content": msg.content}
             for msg in messages
@@ -54,7 +66,8 @@ class PerplexityProvider(BaseLLMProvider):
             metadata={
                 "id": response.id,
                 "finish_reason": response.choices[0].finish_reason,
-                "citations": getattr(response, "citations", None)  # Perplexity includes citations
+                "citations": getattr(response, "citations", None),
+                "search_results": getattr(response, "search_results", None),
             }
         )
 
@@ -77,14 +90,12 @@ class PerplexityProvider(BaseLLMProvider):
                 yield chunk.choices[0].delta.content
 
     def list_models(self) -> List[str]:
-        """List available Perplexity models."""
-        # Perplexity doesn't provide a models endpoint, return known models (2025 Sonar API)
+        """List available Perplexity models (2026 Sonar API lineup)."""
         return [
-            "sonar-pro",
-            "sonar",
-            "sonar-reasoning-pro",
-            "llama-3.1-sonar-large-128k-online",
-            "llama-3.1-sonar-small-128k-online",
+            "sonar",               # Lightweight, cost-effective search
+            "sonar-pro",           # Advanced search, complex queries (default)
+            "sonar-reasoning-pro", # Chain-of-Thought for complex analysis
+            "sonar-deep-research", # Exhaustive multi-source research reports
         ]
 
     def analyze_image(self, image: Union[str, bytes], prompt: str = "Describe this image", **kwargs) -> CompletionResponse:
