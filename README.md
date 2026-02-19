@@ -4,7 +4,7 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Core infrastructure for the [geepers](https://github.com/lukeslp/geepers-kernel) 72-agent system. Provides a unified interface to 14 LLM providers, two multi-agent orchestration patterns, 18 data clients, an MCP server, and Flask web utilities — all from a single `pip install`.
+Core infrastructure for the [geepers](https://github.com/lukeslp/geepers) 72-agent system. Provides a unified interface to 14 LLM providers, two multi-agent orchestration patterns, 18 data clients, an MCP server, and Flask web utilities — all from a single `pip install`.
 
 Previously published as `geepers-core` and `dr-eamer-ai-shared`. Live at [dr.eamer.dev](https://dr.eamer.dev).
 
