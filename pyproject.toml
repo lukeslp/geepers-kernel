@@ -81,7 +81,7 @@ all = [
 
 [tool.setuptools]
 # Explicitly list all packages - setuptools isn't finding the root package
-packages = ["shared", "shared.data_fetching", "shared.llm_providers", "shared.mcp", "shared.memory", "shared.observability", "shared.tools", "shared.utils", "shared.web"]
+packages = ["shared", "shared.api_auth", "shared.data_fetching", "shared.document_generation", "shared.llm_providers", "shared.mcp", "shared.memory", "shared.observability", "shared.orchestration", "shared.tools", "shared.utils", "shared.web"]
 package-dir = {"shared" = "."}
 
 [tool.setuptools.package-data]
