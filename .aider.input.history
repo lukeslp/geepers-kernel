@@ -1,0 +1,38 @@
+
+# 2026-02-18 18:46:29.542627
++We just renamed and cleaned up a Python library called geepers-kernel (previously geepers-core, dr-eamer-ai-shared). It's a foundation library for a 72-agent system. Published to PyPI.
++
++What it has:
++- 14 LLM providers (Anthropic, OpenAI, xAI/Grok, Mistral, Cohere, Gemini, Perplexity, Groq, HuggingFace, ElevenLabs, Ollama, Gradient, Manus, ClaudeCode) via ProviderFactory singleton
++- Dream Cascade orchestrator (hierarchical 3-tier: 8 parallel workers → synthesis → executive summary)
++- Dream Swarm orchestrator (parallel domain-specific agents)
++- 18 data API clients (arXiv, Wikipedia, GitHub, NASA, PubMed, Census, etc.) via ClientFactory
++- MCP server (port 5060 SSE, port 5061 remote HTTP for Claude Desktop)
++- Flask web blueprints (LLM proxy, auth, CORS, health endpoints)
++- Tool registry (MCP-compatible schemas)
++- ConfigManager (env var + file precedence)
++- Utils: vision, embeddings, document gen (PDF/DOCX/MD), TTS, retry, rate limiting
++
++Recently done: renamed to geepers-kernel, v1.1.0, new README, cruft cleanup.
++Known gaps: phased workflow orchestrator, Bluesky AT Protocol client.
++
++Beyond these gaps, what else would you recommend? Focus on: developer experience, versioning, testing, packaging, observability, documentation, patterns commonly missing from multi-LLM foundation libraries.
+
+# 2026-02-18 18:46:29.542753
++We just renamed and cleaned up a Python library called geepers-kernel (previously geepers-core, dr-eamer-ai-shared). It's a foundation library for a 72-agent system. Published to PyPI.
++
++What it has:
++- 14 LLM providers (Anthropic, OpenAI, xAI/Grok, Mistral, Cohere, Gemini, Perplexity, Groq, HuggingFace, ElevenLabs, Ollama, Gradient, Manus, ClaudeCode) via ProviderFactory singleton
++- Dream Cascade orchestrator (hierarchical 3-tier: 8 parallel workers → synthesis → executive summary)
++- Dream Swarm orchestrator (parallel domain-specific agents)
++- 18 data API clients (arXiv, Wikipedia, GitHub, NASA, PubMed, Census, etc.) via ClientFactory
++- MCP server (port 5060 SSE, port 5061 remote HTTP for Claude Desktop)
++- Flask web blueprints (LLM proxy, auth, CORS, health endpoints)
++- Tool registry (MCP-compatible schemas)
++- ConfigManager (env var + file precedence)
++- Utils: vision, embeddings, document gen (PDF/DOCX/MD), TTS, retry, rate limiting
++
++Recently done: renamed to geepers-kernel, v1.1.0, new README, cruft cleanup.
++Known gaps: phased workflow orchestrator, Bluesky AT Protocol client.
++
++Beyond these gaps, what else would you recommend? Focus on: developer experience, versioning, testing, packaging, observability, documentation, patterns commonly missing from multi-LLM foundation libraries.
