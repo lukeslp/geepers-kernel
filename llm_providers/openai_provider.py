@@ -43,11 +43,12 @@ class OpenAIProvider(BaseLLMProvider):
         model = kwargs.get("model", self.model)
         api_kwargs = {k: v for k, v in kwargs.items() if k != "model"}
 
-        # gpt-5+ and reasoning models (o1/o3/o4) require max_completion_tokens
+        # gpt-5+ and reasoning models (o1/o3/o4) don't support max_tokens — drop it
+        # (max_completion_tokens requires openai>=1.30 which may not be installed)
         if "max_tokens" in api_kwargs:
             is_new_model = any(x in model for x in ['gpt-5', 'o1', 'o3', 'o4']) and 'gpt-4o' not in model
             if is_new_model:
-                api_kwargs['max_completion_tokens'] = api_kwargs.pop('max_tokens')
+                api_kwargs.pop('max_tokens')
 
         response = self.client.chat.completions.create(
             model=model,
@@ -79,11 +80,11 @@ class OpenAIProvider(BaseLLMProvider):
         model = kwargs.get("model", self.model)
         api_kwargs = {k: v for k, v in kwargs.items() if k not in ["model", "stream"]}
 
-        # gpt-5+ and reasoning models require max_completion_tokens
+        # gpt-5+ and reasoning models don't support max_tokens — drop it
         if "max_tokens" in api_kwargs:
             is_new_model = any(x in model for x in ['gpt-5', 'o1', 'o3', 'o4']) and 'gpt-4o' not in model
             if is_new_model:
-                api_kwargs['max_completion_tokens'] = api_kwargs.pop('max_tokens')
+                api_kwargs.pop('max_tokens')
 
         stream = self.client.chat.completions.create(
             model=model,
@@ -284,15 +285,14 @@ class OpenAIProvider(BaseLLMProvider):
             }
         ]
 
-        # Use max_completion_tokens for reasoning models (o1, o3, o4-mini, etc.)
-        # Use max_tokens for standard chat models (gpt-4o, gpt-4-turbo)
-        is_reasoning_model = any(x in model for x in ['o1', 'o3', 'o4']) and 'gpt-4o' not in model
-        token_param = "max_completion_tokens" if is_reasoning_model else "max_tokens"
+        # Reasoning models and gpt-5+ don't support max_tokens — drop it (SDK 1.3 lacks max_completion_tokens)
+        is_new_model = any(x in model for x in ['gpt-5', 'o1', 'o3', 'o4']) and 'gpt-4o' not in model
+        token_kwargs = {} if is_new_model else {"max_tokens": max_tokens}
 
         response = self.client.chat.completions.create(
             model=model,
             messages=messages,
-            **{token_param: max_tokens}
+            **token_kwargs
         )
 
         return CompletionResponse(
