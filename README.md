@@ -290,7 +290,7 @@ Tool naming follows the Dreamwalker convention:
 
 ## Flask web utilities
 
-Reusable components for building LLM-backed services:
+Drop-in Flask components for LLM-backed services:
 
 ```python
 from flask import Flask
