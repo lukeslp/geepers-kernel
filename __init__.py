@@ -1,11 +1,14 @@
 """
-Shared library for AI development projects.
+geepers-kernel — core infrastructure for LLM-powered multi-agent systems.
 
-This library provides common functionality across multiple projects including:
-- LLM provider abstraction
-- Observability and telemetry
-- Memory and caching (Redis)
-- Utilities for configuration and retry logic
+Provides:
+- 14 LLM providers (Anthropic, OpenAI, xAI, Mistral, Cohere, Gemini, and more)
+- Dream Cascade and Dream Swarm orchestrators for multi-agent workflows
+- 18 structured data API clients (arXiv, Census, GitHub, NASA, Wikipedia, ...)
+- MCP server exposing tools via HTTP/SSE (port 5060)
+- Flask web utilities: blueprints, auth, CORS, SSE streaming
+- Unified exception hierarchy (GeepersError and subclasses)
+- Cost tracking and observability for all LLM calls
 """
 
 __version__ = "1.1.0"
