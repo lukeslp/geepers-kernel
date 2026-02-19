@@ -11,9 +11,9 @@ license = {text = "MIT"}
 authors = [{name = "Luke Steuber", email = "luke@dr.eamer.dev"}]
 requires-python = ">=3.8"
 keywords = [
-    "llm", "ai", "artificial-intelligence", "utilities", "anthropic", "openai",
+    "llm", "llm-providers", "geepers", "orchestration", "anthropic", "openai",
     "xai", "grok", "claude", "gpt", "mistral", "cohere", "gemini",
-    "mcp", "model-context-protocol", "configuration", "providers"
+    "mcp", "model-context-protocol", "multi-agent", "data-fetching", "providers"
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -46,10 +46,10 @@ dependencies = [
 [project.urls]
 Homepage = "https://dr.eamer.dev"
 Documentation = "https://dr.eamer.dev/shared/"
-Repository = "https://github.com/lukeslp/kernel"
-Source = "https://github.com/lukeslp/kernel/tree/master/shared"
-"Bug Reports" = "https://github.com/lukeslp/kernel/issues"
-Changelog = "https://github.com/lukeslp/kernel/blob/master/shared/CLAUDE.md"
+Repository = "https://github.com/lukeslp/geepers-kernel"
+Source = "https://github.com/lukeslp/geepers-kernel"
+"Bug Reports" = "https://github.com/lukeslp/geepers-kernel/issues"
+Changelog = "https://github.com/lukeslp/geepers-kernel/blob/master/CLAUDE.md"
 
 [project.optional-dependencies]
 anthropic = ["anthropic>=0.71.0"]
