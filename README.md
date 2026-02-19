@@ -25,7 +25,7 @@ pip install geepers-kernel
 
 Optional extras: `anthropic`, `openai`, `xai`, `mistral`, `cohere`, `gemini`, `perplexity`, `groq`, `huggingface`, `redis`, `telemetry`
 
-> **Import namespace:** After installing, the package imports as `shared.*`. When running from a local clone, add the repo root to your path first (see examples below).
+> **Note:** The package imports as `shared.*` (not as `geepers_kernel`). Running from a local clone? Add the repo root to your path first — the quick start examples below show how.
 
 ---
 
