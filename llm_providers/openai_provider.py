@@ -43,12 +43,15 @@ class OpenAIProvider(BaseLLMProvider):
         model = kwargs.get("model", self.model)
         api_kwargs = {k: v for k, v in kwargs.items() if k != "model"}
 
-        # gpt-5+ and reasoning models (o1/o3/o4) don't support max_tokens — drop it
-        # (max_completion_tokens requires openai>=1.30 which may not be installed)
-        if "max_tokens" in api_kwargs:
-            is_new_model = any(x in model for x in ['gpt-5', 'o1', 'o3', 'o4']) and 'gpt-4o' not in model
-            if is_new_model:
-                api_kwargs.pop('max_tokens')
+        # gpt-5+ and reasoning models (o1/o3/o4) reject sampling params
+        # Unsupported: max_tokens, temperature (unless 1), top_p, presence_penalty,
+        #              frequency_penalty, logprobs
+        is_new_model = any(x in model for x in ['gpt-5', 'o1', 'o3', 'o4']) and 'gpt-4o' not in model
+        if is_new_model:
+            for param in ('max_tokens', 'top_p', 'presence_penalty', 'frequency_penalty', 'logprobs'):
+                api_kwargs.pop(param, None)
+            if api_kwargs.get('temperature') not in (None, 1, 1.0):
+                api_kwargs.pop('temperature', None)
 
         response = self.client.chat.completions.create(
             model=model,
@@ -80,11 +83,13 @@ class OpenAIProvider(BaseLLMProvider):
         model = kwargs.get("model", self.model)
         api_kwargs = {k: v for k, v in kwargs.items() if k not in ["model", "stream"]}
 
-        # gpt-5+ and reasoning models don't support max_tokens — drop it
-        if "max_tokens" in api_kwargs:
-            is_new_model = any(x in model for x in ['gpt-5', 'o1', 'o3', 'o4']) and 'gpt-4o' not in model
-            if is_new_model:
-                api_kwargs.pop('max_tokens')
+        # gpt-5+ and reasoning models reject sampling params
+        is_new_model = any(x in model for x in ['gpt-5', 'o1', 'o3', 'o4']) and 'gpt-4o' not in model
+        if is_new_model:
+            for param in ('max_tokens', 'top_p', 'presence_penalty', 'frequency_penalty', 'logprobs'):
+                api_kwargs.pop(param, None)
+            if api_kwargs.get('temperature') not in (None, 1, 1.0):
+                api_kwargs.pop('temperature', None)
 
         stream = self.client.chat.completions.create(
             model=model,
