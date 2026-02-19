@@ -8,6 +8,7 @@ from pathlib import Path
 from . import BaseLLMProvider, Message, CompletionResponse, ImageResponse, AudioResponse
 import os
 import base64
+import httpx
 
 
 class OpenAIProvider(BaseLLMProvider):
@@ -25,7 +26,10 @@ class OpenAIProvider(BaseLLMProvider):
 
         try:
             from openai import OpenAI
-            self.client = OpenAI(api_key=api_key)
+            self.client = OpenAI(
+                api_key=api_key,
+                http_client=httpx.Client()
+            )
         except ImportError:
             raise ImportError("openai package is required. Install with: pip install openai")
 

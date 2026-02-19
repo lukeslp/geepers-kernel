@@ -223,4 +223,4 @@ Additional guides:
 
 ## Version Control
 
-Repo: `https://github.com/lukeslp/kernel`
+Repo: `https://github.com/lukeslp/dr-eamer-ai-shared`

@@ -6,6 +6,7 @@ from typing import List, Union
 from . import BaseLLMProvider, Message, CompletionResponse
 import os
 import base64
+import httpx
 
 
 class PerplexityProvider(BaseLLMProvider):
@@ -25,7 +26,8 @@ class PerplexityProvider(BaseLLMProvider):
             from openai import OpenAI
             self.client = OpenAI(
                 api_key=api_key,
-                base_url="https://api.perplexity.ai"
+                base_url="https://api.perplexity.ai",
+                http_client=httpx.Client()
             )
         except ImportError:
             raise ImportError("openai package is required. Install with: pip install openai")

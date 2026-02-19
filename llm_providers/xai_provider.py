@@ -8,6 +8,7 @@ from . import BaseLLMProvider, Message, CompletionResponse, ImageResponse
 import os
 import base64
 import requests
+import httpx
 
 
 class XAIProvider(BaseLLMProvider):
@@ -27,7 +28,8 @@ class XAIProvider(BaseLLMProvider):
             from openai import OpenAI
             self.client = OpenAI(
                 api_key=api_key,
-                base_url="https://api.x.ai/v1"
+                base_url="https://api.x.ai/v1",
+                http_client=httpx.Client()
             )
         except ImportError:
             raise ImportError("openai package is required. Install with: pip install openai")

@@ -34,6 +34,7 @@ import tempfile
 from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Optional, Tuple, Dict, Any
+import httpx
 
 # Optional dependencies with graceful fallbacks
 try:
@@ -157,8 +158,13 @@ class VisionClient:
         self.model = model
         self.provider = provider
 
-        # Initialize OpenAI client (compatible with xAI)
-        self.client = OpenAI(api_key=self.api_key, base_url=self.base_url)
+        # Initialize OpenAI client (compatible with xAI).
+        # Explicit http_client avoids openai<2 + httpx>=0.28 proxy arg mismatch.
+        self.client = OpenAI(
+            api_key=self.api_key,
+            base_url=self.base_url,
+            http_client=httpx.Client()
+        )
 
         logger.info(f"Initialized VisionClient (provider={provider}, model={model})")
 
