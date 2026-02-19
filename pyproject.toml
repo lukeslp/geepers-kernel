@@ -41,6 +41,7 @@ dependencies = [
     "gtts>=2.5.0",
     "bibtexparser>=1.4.0",
     "aiohttp>=3.12.14",
+    "pyyaml>=6.0",
 ]
 
 [project.urls]
@@ -49,7 +50,7 @@ Documentation = "https://dr.eamer.dev/shared/"
 Repository = "https://github.com/lukeslp/geepers-kernel"
 Source = "https://github.com/lukeslp/geepers-kernel"
 "Bug Reports" = "https://github.com/lukeslp/geepers-kernel/issues"
-Changelog = "https://github.com/lukeslp/geepers-kernel/blob/master/CLAUDE.md"
+Changelog = "https://github.com/lukeslp/geepers-kernel/blob/master/CHANGELOG.md"
 
 [project.optional-dependencies]
 anthropic = ["anthropic>=0.71.0"]

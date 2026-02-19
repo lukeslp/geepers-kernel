@@ -19,19 +19,42 @@ logger = logging.getLogger(__name__)
 
 
 def _load_pricing() -> Dict:
-    """Load pricing from pricing.yaml, converting floats to Decimal."""
+    """Load pricing from pricing.yaml, converting floats to Decimal.
+
+    Note: Decimal(str(v)) avoids floating-point representation errors
+    that would occur with Decimal(v) directly on YAML-parsed floats.
+    """
     pricing_file = Path(__file__).parent / "pricing.yaml"
-    with open(pricing_file) as f:
-        raw = yaml.safe_load(f)
-    return {
-        provider: {
-            model: {
-                k: Decimal(str(v)) for k, v in rates.items()
+    try:
+        with open(pricing_file) as f:
+            raw = yaml.safe_load(f)
+    except FileNotFoundError:
+        raise FileNotFoundError(
+            f"pricing.yaml not found at {pricing_file}. "
+            "Ensure the package was installed with its data files."
+        )
+    except yaml.YAMLError as e:
+        raise ValueError(f"Failed to parse pricing.yaml: {e}")
+
+    if not isinstance(raw, dict):
+        raise ValueError(f"pricing.yaml must be a mapping, got {type(raw).__name__}")
+
+    try:
+        return {
+            provider: {
+                model: {
+                    k: Decimal(str(v)) for k, v in rates.items()
+                }
+                for model, rates in models.items()
             }
-            for model, rates in models.items()
+            for provider, models in raw.items()
         }
-        for provider, models in raw.items()
-    }
+    except (AttributeError, TypeError) as e:
+        raise ValueError(
+            f"pricing.yaml has unexpected structure. "
+            "Expected: provider -> model -> {{prompt: float, completion: float}}. "
+            f"Error: {e}"
+        )
 
 
 PRICING = _load_pricing()
