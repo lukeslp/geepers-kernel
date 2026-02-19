@@ -3,9 +3,9 @@ requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "geepers-core"
-version = "1.0.2"
-description = "Foundation library for geepers multi-agent system - LLM providers, config management, and utilities"
+name = "geepers-kernel"
+version = "1.1.0"
+description = "Core infrastructure for the geepers agent system — LLM providers, orchestration, data clients, and MCP server"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Luke Steuber", email = "luke@dr.eamer.dev"}]
