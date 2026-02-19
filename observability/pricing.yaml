@@ -1,6 +1,11 @@
 # LLM Provider Pricing
 # Per 1M tokens (USD). Update when providers change rates.
 # Last updated: 2026-02-19
+#
+# Model ID keys must match exactly what is passed to CostTracker.calculate_cost().
+# Claude 4.x models use IDs without date suffixes (e.g., claude-sonnet-4-6).
+# Claude 3.x models use dated IDs (e.g., claude-3-5-sonnet-20241022).
+# This reflects how Anthropic's API identifies these models in usage responses.
 
 openai:
   gpt-4o:           { prompt: 2.50,  completion: 10.00 }
@@ -23,7 +28,7 @@ anthropic:
 
 xai:
   grok-3:           { prompt: 3.00,  completion: 15.00 }
-  grok-3-fast:      { prompt: 5.00,  completion: 25.00 }
+  grok-3-fast:      { prompt: 5.00,  completion: 25.00 }  # Higher throughput tier, not cheaper — verify at x.ai/api/pricing
   grok-3-mini:      { prompt: 0.30,  completion: 0.50  }
   grok-2:           { prompt: 2.00,  completion: 10.00 }
   grok-beta:        { prompt: 5.00,  completion: 15.00 }

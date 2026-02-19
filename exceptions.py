@@ -26,8 +26,8 @@ class ProviderError(GeepersError):
 class RateLimitError(ProviderError):
     """Provider returned a rate limit / quota error."""
 
-    def __init__(self, message: str, provider: str = "", retry_after: float = 0.0):
-        super().__init__(message, provider=provider)
+    def __init__(self, message: str, provider: str = "", model: str = "", retry_after: float = 0.0):
+        super().__init__(message, provider=provider, model=model)
         self.retry_after = retry_after  # seconds, 0 = unknown
 
 
