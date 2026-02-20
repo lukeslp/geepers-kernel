@@ -20,7 +20,7 @@ Usage:
     print(result.description)
 
     # Advanced usage
-    client = VisionClient(api_key="xai-...", model="grok-2-vision-1212")
+    client = VisionClient(api_key="xai-...", model="grok-2-vision-latest")
     result = client.analyze_image("photo.jpg", prompt="Describe this image in detail")
     print(f"Suggested filename: {result.suggested_filename}")
 
@@ -123,7 +123,7 @@ class VisionClient:
         self,
         api_key: Optional[str] = None,
         base_url: str = "https://api.x.ai/v1",
-        model: str = "grok-2-vision-1212",
+        model: str = "grok-2-vision-latest",
         provider: str = "xai"
     ):
         """
@@ -502,7 +502,7 @@ def analyze_image(
     image_path: Path,
     api_key: Optional[str] = None,
     prompt: Optional[str] = None,
-    model: str = "grok-2-vision-1212"
+    model: str = "grok-2-vision-latest"
 ) -> VisionResult:
     """
     Convenience function for quick image analysis.
@@ -529,7 +529,7 @@ def analyze_video(
     api_key: Optional[str] = None,
     frame_position: float = 0.3,
     prompt: Optional[str] = None,
-    model: str = "grok-2-vision-1212"
+    model: str = "grok-2-vision-latest"
 ) -> VisionResult:
     """
     Convenience function for quick video analysis.
@@ -556,7 +556,7 @@ def generate_filename_from_vision(
     file_path: Path,
     api_key: Optional[str] = None,
     max_words: int = 5,
-    model: str = "grok-2-vision-1212"
+    model: str = "grok-2-vision-latest"
 ) -> str:
     """
     Generate a descriptive filename from visual content.
