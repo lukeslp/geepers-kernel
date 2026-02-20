@@ -4,16 +4,16 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geepers-kernel"
-version = "1.1.0"
-description = "Core infrastructure for the geepers agent system — LLM providers, orchestration, data clients, and MCP server"
+version = "1.2.0"
+description = "Foundation library for the geepers ecosystem — LLM providers, config management, data fetching, and utilities"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Luke Steuber", email = "luke@dr.eamer.dev"}]
 requires-python = ">=3.8"
 keywords = [
-    "llm", "llm-providers", "geepers", "orchestration", "anthropic", "openai",
+    "llm", "ai", "artificial-intelligence", "utilities", "anthropic", "openai",
     "xai", "grok", "claude", "gpt", "mistral", "cohere", "gemini",
-    "mcp", "model-context-protocol", "multi-agent", "data-fetching", "providers"
+    "mcp", "model-context-protocol", "configuration", "providers"
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -41,16 +41,15 @@ dependencies = [
     "gtts>=2.5.0",
     "bibtexparser>=1.4.0",
     "aiohttp>=3.12.14",
-    "pyyaml>=6.0",
 ]
 
 [project.urls]
 Homepage = "https://dr.eamer.dev"
 Documentation = "https://dr.eamer.dev/shared/"
-Repository = "https://github.com/lukeslp/geepers-kernel"
-Source = "https://github.com/lukeslp/geepers-kernel"
-"Bug Reports" = "https://github.com/lukeslp/geepers-kernel/issues"
-Changelog = "https://github.com/lukeslp/geepers-kernel/blob/master/CHANGELOG.md"
+Repository = "https://github.com/lukeslp/kernel"
+Source = "https://github.com/lukeslp/kernel/tree/master/shared"
+"Bug Reports" = "https://github.com/lukeslp/kernel/issues"
+Changelog = "https://github.com/lukeslp/kernel/blob/master/shared/CLAUDE.md"
 
 [project.optional-dependencies]
 anthropic = ["anthropic>=0.71.0"]
@@ -81,7 +80,7 @@ all = [
 
 [tool.setuptools]
 # Explicitly list all packages - setuptools isn't finding the root package
-packages = ["shared", "shared.api_auth", "shared.data_fetching", "shared.document_generation", "shared.llm_providers", "shared.mcp", "shared.memory", "shared.observability", "shared.orchestration", "shared.tools", "shared.utils", "shared.web"]
+packages = ["shared", "shared.data_fetching", "shared.llm_providers", "shared.mcp", "shared.memory", "shared.observability", "shared.tools", "shared.utils", "shared.web"]
 package-dir = {"shared" = "."}
 
 [tool.setuptools.package-data]
