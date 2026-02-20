@@ -7,8 +7,6 @@ Author: Luke Steuber
 """
 
 import logging
-import yaml
-from pathlib import Path
 from typing import Dict, Optional
 from decimal import Decimal
 from datetime import datetime, date
@@ -18,46 +16,49 @@ from dataclasses import dataclass, field
 logger = logging.getLogger(__name__)
 
 
-def _load_pricing() -> Dict:
-    """Load pricing from pricing.yaml, converting floats to Decimal.
-
-    Note: Decimal(str(v)) avoids floating-point representation errors
-    that would occur with Decimal(v) directly on YAML-parsed floats.
-    """
-    pricing_file = Path(__file__).parent / "pricing.yaml"
-    try:
-        with open(pricing_file) as f:
-            raw = yaml.safe_load(f)
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            f"pricing.yaml not found at {pricing_file}. "
-            "Ensure the package was installed with its data files."
-        )
-    except yaml.YAMLError as e:
-        raise ValueError(f"Failed to parse pricing.yaml: {e}")
-
-    if not isinstance(raw, dict):
-        raise ValueError(f"pricing.yaml must be a mapping, got {type(raw).__name__}")
-
-    try:
-        return {
-            provider: {
-                model: {
-                    k: Decimal(str(v)) for k, v in rates.items()
-                }
-                for model, rates in models.items()
-            }
-            for provider, models in raw.items()
-        }
-    except (AttributeError, TypeError) as e:
-        raise ValueError(
-            f"pricing.yaml has unexpected structure. "
-            "Expected: provider -> model -> {{prompt: float, completion: float}}. "
-            f"Error: {e}"
-        )
-
-
-PRICING = _load_pricing()
+# Pricing per 1M tokens (as of November 2025)
+PRICING = {
+    'openai': {
+        'gpt-4o': {'prompt': Decimal('2.50'), 'completion': Decimal('10.00')},
+        'gpt-4o-mini': {'prompt': Decimal('0.15'), 'completion': Decimal('0.60')},
+        'gpt-4-turbo': {'prompt': Decimal('10.00'), 'completion': Decimal('30.00')},
+        'gpt-3.5-turbo': {'prompt': Decimal('0.50'), 'completion': Decimal('1.50')},
+    },
+    'anthropic': {
+        'claude-3-5-sonnet-20241022': {'prompt': Decimal('3.00'), 'completion': Decimal('15.00')},
+        'claude-sonnet-4': {'prompt': Decimal('3.00'), 'completion': Decimal('15.00')},
+        'claude-3-haiku-20240307': {'prompt': Decimal('0.25'), 'completion': Decimal('1.25')},
+        'claude-3-opus-20240229': {'prompt': Decimal('15.00'), 'completion': Decimal('75.00')},
+    },
+    'xai': {
+        'grok-beta': {'prompt': Decimal('5.00'), 'completion': Decimal('15.00')},
+        'grok-2': {'prompt': Decimal('5.00'), 'completion': Decimal('15.00')},
+        'grok-3': {'prompt': Decimal('5.00'), 'completion': Decimal('15.00')},
+    },
+    'mistral': {
+        'mistral-small-latest': {'prompt': Decimal('1.00'), 'completion': Decimal('3.00')},
+        'mistral-medium-latest': {'prompt': Decimal('2.70'), 'completion': Decimal('8.10')},
+        'mistral-large-latest': {'prompt': Decimal('4.00'), 'completion': Decimal('12.00')},
+    },
+    'cohere': {
+        'command-light': {'prompt': Decimal('0.30'), 'completion': Decimal('0.60')},
+        'command': {'prompt': Decimal('1.00'), 'completion': Decimal('2.00')},
+        'command-r-plus': {'prompt': Decimal('3.00'), 'completion': Decimal('15.00')},
+    },
+    'gemini': {
+        'gemini-1.5-flash': {'prompt': Decimal('0.075'), 'completion': Decimal('0.30')},
+        'gemini-1.5-pro': {'prompt': Decimal('1.25'), 'completion': Decimal('5.00')},
+    },
+    'perplexity': {
+        'llama-3.1-sonar-small-128k-online': {'prompt': Decimal('0.20'), 'completion': Decimal('0.20')},
+        'llama-3.1-sonar-large-128k-online': {'prompt': Decimal('1.00'), 'completion': Decimal('1.00')},
+        'llama-3.1-sonar-huge-128k-online': {'prompt': Decimal('5.00'), 'completion': Decimal('5.00')},
+    },
+    'groq': {
+        'llama-3.1-8b-instant': {'prompt': Decimal('0.05'), 'completion': Decimal('0.08')},
+        'llama-3.1-70b-versatile': {'prompt': Decimal('0.59'), 'completion': Decimal('0.79')},
+    },
+}
 
 
 @dataclass

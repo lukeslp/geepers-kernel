@@ -29,7 +29,7 @@ cd /home/coolhand/shared/mcp && python unified_server.py   # Port 5060
 
 ## Overview
 
-Python library published as **`geepers-kernel`** (PyPI, v1.1.0). Previously `geepers-core` and `dr-eamer-ai-shared`. `setup.py` has been removed — `pyproject.toml` is the sole build config. Provides reusable LLM, orchestration, data fetching, and web infrastructure for all projects on dr.eamer.dev.
+Python library published as **`geepers-core`** (PyPI, v1.0.2). Previously `dr-eamer-ai-shared` - the README still uses the old name. Provides reusable LLM, orchestration, data fetching, and web infrastructure for all projects on dr.eamer.dev.
 
 **Each module has its own CLAUDE.md** with detailed API docs and code examples. This file covers cross-cutting architecture and what you need to know across modules.
 
@@ -77,9 +77,6 @@ config.py ───────────────────────�
     │       ├── web_search_server.py ─────────────── Web search tools
     │       ├── cache_server.py ──────────────────── Response caching
     │       └── streaming.py + background_loop.py ── SSE streaming + async execution
-    │
-    ├── remote_mcp/  ── server.py (port 5061) ──── FastMCP wrapper for remote HTTP/Streamable access
-    │       └── Caddy route: /mcp-remote/ ──────── Claude Desktop Custom Connector endpoint
     │
     ├── web/  ── Flask components ────────────────── Reusable Flask blueprints and middleware
     │       ├── llm_proxy_blueprint.py ───────────── Unified LLM proxy (POST /complete, /stream, /vision)
@@ -149,7 +146,6 @@ from web import create_health_endpoint, setup_cors
 | Service | Port |
 |---------|------|
 | MCP Server (unified_server.py) | 5060 |
-| Remote MCP Server (remote_mcp/server.py) | 5061 |
 | Dreamwalker UI | 5080 |
 | Dev/Testing | 5010-5019, 5050-5059 |
 
@@ -223,4 +219,4 @@ Additional guides:
 
 ## Version Control
 
-Repo: `https://github.com/lukeslp/geepers-kernel`
+Repo: `https://github.com/lukeslp/kernel`

@@ -14,7 +14,6 @@ from typing import List, Optional, Dict, Any, Iterator, Union
 from . import BaseLLMProvider, Message, CompletionResponse
 import os
 import json
-import httpx
 
 
 class GradientProvider(BaseLLMProvider):
@@ -104,8 +103,7 @@ class GradientProvider(BaseLLMProvider):
                 from openai import OpenAI
                 self._client = OpenAI(
                     api_key=self.api_key,
-                    base_url=self.base_url,
-                    http_client=httpx.Client()
+                    base_url=self.base_url
                 )
                 self._use_openai_sdk = True
             except ImportError:

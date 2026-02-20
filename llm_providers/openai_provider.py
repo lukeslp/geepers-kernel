@@ -8,7 +8,6 @@ from pathlib import Path
 from . import BaseLLMProvider, Message, CompletionResponse, ImageResponse, AudioResponse
 import os
 import base64
-import httpx
 
 
 class OpenAIProvider(BaseLLMProvider):
@@ -26,10 +25,7 @@ class OpenAIProvider(BaseLLMProvider):
 
         try:
             from openai import OpenAI
-            self.client = OpenAI(
-                api_key=api_key,
-                http_client=httpx.Client()
-            )
+            self.client = OpenAI(api_key=api_key)
         except ImportError:
             raise ImportError("openai package is required. Install with: pip install openai")
 
@@ -40,23 +36,10 @@ class OpenAIProvider(BaseLLMProvider):
             for msg in messages
         ]
 
-        model = kwargs.get("model", self.model)
-        api_kwargs = {k: v for k, v in kwargs.items() if k != "model"}
-
-        # gpt-5+ and reasoning models (o1/o3/o4) reject sampling params
-        # Unsupported: max_tokens, temperature (unless 1), top_p, presence_penalty,
-        #              frequency_penalty, logprobs
-        is_new_model = any(x in model for x in ['gpt-5', 'o1', 'o3', 'o4']) and 'gpt-4o' not in model
-        if is_new_model:
-            for param in ('max_tokens', 'top_p', 'presence_penalty', 'frequency_penalty', 'logprobs'):
-                api_kwargs.pop(param, None)
-            if api_kwargs.get('temperature') not in (None, 1, 1.0):
-                api_kwargs.pop('temperature', None)
-
         response = self.client.chat.completions.create(
-            model=model,
+            model=kwargs.get("model", self.model),
             messages=formatted_messages,
-            **api_kwargs
+            **{k: v for k, v in kwargs.items() if k != "model"}
         )
 
         return CompletionResponse(
@@ -80,22 +63,11 @@ class OpenAIProvider(BaseLLMProvider):
             for msg in messages
         ]
 
-        model = kwargs.get("model", self.model)
-        api_kwargs = {k: v for k, v in kwargs.items() if k not in ["model", "stream"]}
-
-        # gpt-5+ and reasoning models reject sampling params
-        is_new_model = any(x in model for x in ['gpt-5', 'o1', 'o3', 'o4']) and 'gpt-4o' not in model
-        if is_new_model:
-            for param in ('max_tokens', 'top_p', 'presence_penalty', 'frequency_penalty', 'logprobs'):
-                api_kwargs.pop(param, None)
-            if api_kwargs.get('temperature') not in (None, 1, 1.0):
-                api_kwargs.pop('temperature', None)
-
         stream = self.client.chat.completions.create(
-            model=model,
+            model=kwargs.get("model", self.model),
             messages=formatted_messages,
             stream=True,
-            **api_kwargs
+            **{k: v for k, v in kwargs.items() if k not in ["model", "stream"]}
         )
 
         for chunk in stream:
@@ -290,14 +262,15 @@ class OpenAIProvider(BaseLLMProvider):
             }
         ]
 
-        # Reasoning models and gpt-5+ don't support max_tokens — drop it (SDK 1.3 lacks max_completion_tokens)
-        is_new_model = any(x in model for x in ['gpt-5', 'o1', 'o3', 'o4']) and 'gpt-4o' not in model
-        token_kwargs = {} if is_new_model else {"max_tokens": max_tokens}
+        # Use max_completion_tokens for reasoning models (o1, o3, o4-mini, etc.)
+        # Use max_tokens for standard chat models (gpt-4o, gpt-4-turbo)
+        is_reasoning_model = any(x in model for x in ['o1', 'o3', 'o4']) and 'gpt-4o' not in model
+        token_param = "max_completion_tokens" if is_reasoning_model else "max_tokens"
 
         response = self.client.chat.completions.create(
             model=model,
             messages=messages,
-            **token_kwargs
+            **{token_param: max_tokens}
         )
 
         return CompletionResponse(

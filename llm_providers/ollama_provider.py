@@ -48,11 +48,8 @@ class OllamaProvider(BaseLLMProvider):
         # Initialize with dummy API key (not used by Ollama)
         super().__init__(api_key=api_key or "local", model=model)
 
-        # Determine Ollama host from environment or use default.
-        # OLLAMA_HOST can be comma-separated for multi-host; we use the first as active.
-        raw_hosts = os.environ.get('OLLAMA_HOST', 'http://localhost:11434')
-        self._all_hosts = [h.strip().rstrip('/') for h in raw_hosts.split(',') if h.strip()]
-        self.host = self._all_hosts[0] if self._all_hosts else 'http://localhost:11434'
+        # Determine Ollama host from environment or use default
+        self.host = os.environ.get('OLLAMA_HOST', 'http://localhost:11434')
         self.available = False
         self.cached_models = []
 
@@ -99,12 +96,8 @@ class OllamaProvider(BaseLLMProvider):
                     # Determine capabilities
                     capabilities = ["text"]
                     families = model_details.get('families', [])
-                    name_lower = model["name"].lower()
-                    if "clip" in families or "vision" in name_lower or "llava" in name_lower or "glm" in name_lower or "minicpm" in name_lower or "qwen2-vl" in name_lower:
+                    if "clip" in families or "vision" in model["name"].lower() or "llava" in model["name"].lower():
                         capabilities.append("vision")
-                    thinking_indicators = ["thinking", "reason", "r1", "qwq", "deepseek-r", "glm-z1"]
-                    if any(t in name_lower for t in thinking_indicators):
-                        capabilities.append("thinking")
 
                     model_info = {
                         "id": model["name"],
@@ -194,7 +187,7 @@ class OllamaProvider(BaseLLMProvider):
                 return 'vision' in cached_model['metadata'].get('capabilities', [])
 
         # Fallback to name-based detection
-        vision_indicators = ["vision", "llava", "bakllava", "clip", "image", "multi-modal", "multimodal", "glm", "minicpm", "qwen2-vl"]
+        vision_indicators = ["vision", "llava", "bakllava", "clip", "image", "multi-modal", "multimodal"]
         model_lower = model.lower()
         return any(indicator in model_lower for indicator in vision_indicators)
 
@@ -493,201 +486,7 @@ class OllamaProvider(BaseLLMProvider):
             "name": "ollama",
             "available": self.available,
             "host": self.host,
-            "all_hosts": getattr(self, '_all_hosts', [self.host]),
             "model_count": len(self.cached_models),
             "models": [m["id"] for m in self.cached_models],
             "default_model": self.model
         }
-
-    def set_host(self, host_url: str) -> bool:
-        """Switch the active Ollama host and re-check availability."""
-        self.host = host_url.rstrip('/')
-        self.available = self._check_availability()
-        if self.available:
-            self.cached_models = self._fetch_models()
-        return self.available
-
-    def pull_model(self, model_name: str, stream: bool = True) -> Iterator[Dict]:
-        """
-        Pull a model from the Ollama registry.
-
-        Args:
-            model_name: Model name to pull (e.g. 'glm4:latest')
-            stream: Whether to stream pull progress
-
-        Yields:
-            Dict with status and optional digest/total/completed fields
-        """
-        payload = {"name": model_name, "stream": stream}
-        try:
-            with requests.post(
-                f"{self.host}/api/pull",
-                json=payload,
-                stream=True,
-                timeout=300
-            ) as response:
-                if response.status_code != 200:
-                    yield {"error": f"Pull failed ({response.status_code}): {response.text}"}
-                    return
-                for line in response.iter_lines():
-                    if not line:
-                        continue
-                    try:
-                        chunk = json.loads(line)
-                        yield chunk
-                        if chunk.get("status") == "success":
-                            self.cached_models = self._fetch_models()
-                    except json.JSONDecodeError:
-                        pass
-        except Exception as e:
-            yield {"error": str(e)}
-
-    def delete_model(self, model_name: str) -> bool:
-        """
-        Delete a model from the local Ollama store.
-
-        Args:
-            model_name: Model name to delete
-
-        Returns:
-            True on success, False otherwise
-        """
-        try:
-            response = requests.delete(
-                f"{self.host}/api/delete",
-                json={"name": model_name},
-                timeout=30
-            )
-            if response.status_code == 200:
-                self.cached_models = [m for m in self.cached_models if m["id"] != model_name]
-                return True
-            logger.error(f"Delete failed ({response.status_code}): {response.text}")
-            return False
-        except Exception as e:
-            logger.error(f"Delete model error: {str(e)}")
-            return False
-
-    def list_running(self) -> List[Dict[str, Any]]:
-        """List currently loaded model processes via /api/ps."""
-        try:
-            response = requests.get(f"{self.host}/api/ps", timeout=5)
-            if response.status_code == 200:
-                return response.json().get("models", [])
-            return []
-        except Exception as e:
-            logger.error(f"list_running error: {str(e)}")
-            return []
-
-    def push_model(self, model_name: str) -> Iterator[Dict]:
-        """
-        Push a model to the Ollama registry.
-
-        Yields:
-            Dict with status updates from the push operation
-        """
-        try:
-            with requests.post(
-                f"{self.host}/api/push",
-                json={"name": model_name, "stream": True},
-                stream=True,
-                timeout=300
-            ) as response:
-                if response.status_code != 200:
-                    yield {"error": f"Push failed ({response.status_code}): {response.text}"}
-                    return
-                for line in response.iter_lines():
-                    if not line:
-                        continue
-                    try:
-                        yield json.loads(line)
-                    except json.JSONDecodeError:
-                        pass
-        except Exception as e:
-            yield {"error": str(e)}
-
-    def generate(self, prompt: str, **kwargs) -> CompletionResponse:
-        """
-        Raw text generation via /api/generate (non-chat format).
-
-        Useful for models that work better with the generate endpoint
-        rather than the chat messages format.
-
-        Args:
-            prompt: Raw text prompt
-            **kwargs: model, temperature, max_tokens, system
-
-        Returns:
-            CompletionResponse
-        """
-        if not self.available:
-            raise RuntimeError(f"Ollama provider is not available at {self.host}")
-
-        model = kwargs.get('model', self.model)
-        payload = {
-            "model": model,
-            "prompt": prompt,
-            "stream": False,
-            "options": {
-                "temperature": kwargs.get('temperature', 0.7),
-                "num_predict": kwargs.get('max_tokens', 4096)
-            }
-        }
-        if kwargs.get('system'):
-            payload["system"] = kwargs['system']
-
-        try:
-            response = requests.post(f"{self.host}/api/generate", json=payload, timeout=120)
-            if response.status_code != 200:
-                raise RuntimeError(f"Ollama generate error ({response.status_code}): {response.text}")
-            result = response.json()
-            return CompletionResponse(
-                content=result.get("response", ""),
-                model=model,
-                usage={
-                    "input_tokens": result.get("prompt_eval_count", 0),
-                    "output_tokens": result.get("eval_count", 0),
-                    "total_tokens": result.get("prompt_eval_count", 0) + result.get("eval_count", 0)
-                },
-                metadata={"done": result.get("done", True)}
-            )
-        except Exception as e:
-            if hasattr(e, '__module__') and 'requests' in str(getattr(e, '__module__', '')):
-                raise RuntimeError(f"Ollama generate request failed: {str(e)}")
-            raise
-
-    def embed(self, text: Union[str, List[str]], model: str = None) -> Dict[str, Any]:
-        """
-        Generate embeddings via /api/embed.
-
-        Args:
-            text: String or list of strings to embed
-            model: Embedding model (defaults to nomic-embed-text or first available)
-
-        Returns:
-            Dict with 'embeddings' list and 'model' key
-        """
-        if not self.available:
-            raise RuntimeError(f"Ollama provider is not available at {self.host}")
-
-        embed_model = model or "nomic-embed-text:latest"
-        input_data = text if isinstance(text, list) else [text]
-
-        try:
-            response = requests.post(
-                f"{self.host}/api/embed",
-                json={"model": embed_model, "input": input_data},
-                timeout=60
-            )
-            if response.status_code != 200:
-                raise RuntimeError(f"Ollama embed error ({response.status_code}): {response.text}")
-            result = response.json()
-            return {
-                "embeddings": result.get("embeddings", []),
-                "model": embed_model,
-                "total_duration": result.get("total_duration"),
-                "prompt_eval_count": result.get("prompt_eval_count")
-            }
-        except Exception as e:
-            if hasattr(e, '__module__') and 'requests' in str(getattr(e, '__module__', '')):
-                raise RuntimeError(f"Ollama embed request failed: {str(e)}")
-            raise

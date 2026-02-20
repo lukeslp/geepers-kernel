@@ -6,7 +6,6 @@ Ultra-fast inference with OpenAI-compatible API.
 from typing import List
 from . import BaseLLMProvider, Message, CompletionResponse
 import os
-import httpx
 
 
 class GroqProvider(BaseLLMProvider):
@@ -26,8 +25,7 @@ class GroqProvider(BaseLLMProvider):
             from openai import OpenAI
             self.client = OpenAI(
                 api_key=api_key,
-                base_url="https://api.groq.com/openai/v1",
-                http_client=httpx.Client()
+                base_url="https://api.groq.com/openai/v1"
             )
         except ImportError:
             raise ImportError("openai package is required. Install with: pip install openai")

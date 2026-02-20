@@ -80,7 +80,6 @@ def ping_openai_compatible(provider: str, api_key: str, base_url: Optional[str] 
     """Ping OpenAI-compatible API."""
     try:
         from openai import OpenAI
-        import httpx
     except ImportError:
         print("Error: openai package not installed")
         return False
@@ -89,11 +88,7 @@ def ping_openai_compatible(provider: str, api_key: str, base_url: Optional[str] 
     print(f"Connecting to {config['name']} API...")
     
     try:
-        client = OpenAI(
-            api_key=api_key,
-            base_url=base_url,
-            http_client=httpx.Client()
-        )
+        client = OpenAI(api_key=api_key, base_url=base_url)
         models = client.models.list()
         
         print(f"SUCCESS: {config['name']} connected!")
