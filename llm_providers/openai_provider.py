@@ -45,6 +45,8 @@ class OpenAIProvider(BaseLLMProvider):
             if 'max_tokens' in params:
                 params['max_completion_tokens'] = params.pop('max_tokens')
             params.setdefault('reasoning_effort', 'medium')
+        elif model.startswith('gpt-5') and 'max_tokens' in params:
+            params['max_completion_tokens'] = params.pop('max_tokens')
 
         response = self.client.chat.completions.create(
             model=model,
@@ -82,6 +84,8 @@ class OpenAIProvider(BaseLLMProvider):
             if 'max_tokens' in params:
                 params['max_completion_tokens'] = params.pop('max_tokens')
             params.setdefault('reasoning_effort', 'medium')
+        elif model.startswith('gpt-5') and 'max_tokens' in params:
+            params['max_completion_tokens'] = params.pop('max_tokens')
 
         stream = self.client.chat.completions.create(
             model=model,
@@ -285,7 +289,7 @@ class OpenAIProvider(BaseLLMProvider):
         # Use max_completion_tokens for reasoning models (o1, o3, o4-mini, etc.)
         # Use max_tokens for standard chat models (gpt-4o, gpt-4-turbo)
         is_reasoning_model = any(x in model for x in ['o1', 'o3', 'o4']) and 'gpt-4o' not in model
-        token_param = "max_completion_tokens" if is_reasoning_model else "max_tokens"
+        token_param = "max_completion_tokens" if (is_reasoning_model or model.startswith('gpt-5')) else "max_tokens"
 
         response = self.client.chat.completions.create(
             model=model,
