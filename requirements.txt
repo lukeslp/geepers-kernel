@@ -6,10 +6,10 @@ python-dotenv>=1.0.0
 # Or install specific provider: pip install anthropic openai
 
 # Anthropic (Claude)
-anthropic>=0.18.0
+anthropic>=0.83.0
 
 # OpenAI (GPT) and xAI (Grok) - both use openai package
-openai>=1.0.0
+openai>=2.0.0
 
 # Mistral
 requests>=2.31.0  # For Mistral API calls

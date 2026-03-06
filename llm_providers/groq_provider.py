@@ -81,19 +81,12 @@ class GroqProvider(BaseLLMProvider):
             models = self.client.models.list()
             return [model.id for model in models.data]
         except Exception:
-            # Fallback list of known models (2025)
+            # Fallback list of known models (March 2026)
             return [
                 "llama-3.3-70b-versatile",
                 "llama-3.3-70b-specdec",
-                "llama-3.1-405b-reasoning",
-                "llama-3.1-70b-versatile",
                 "llama-3.1-8b-instant",
                 "llama-3.2-90b-vision-preview",
                 "llama-3.2-11b-vision-preview",
-                "llama-3.2-3b-preview",
-                "llama-3.2-1b-preview",
                 "llama-guard-3-8b",
-                "mixtral-8x7b-32768",
-                "gemma2-9b-it",
-                "gemma-7b-it",
             ]

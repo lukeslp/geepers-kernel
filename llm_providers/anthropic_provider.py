@@ -36,7 +36,7 @@ class BatchResponse:
 class AnthropicProvider(BaseLLMProvider):
     """Anthropic Claude provider."""
 
-    DEFAULT_MODEL = "claude-3-5-sonnet-20241022"
+    DEFAULT_MODEL = "claude-sonnet-4-6"
 
     def __init__(self, api_key: str = None, model: str = None):
         api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
@@ -63,16 +63,40 @@ class AnthropicProvider(BaseLLMProvider):
             else:
                 formatted_messages.append({"role": msg.role, "content": msg.content})
 
+        # Parameters forwarded to Anthropic API
+        _passthrough_skip = {"model", "max_tokens", "system", "effort", "thinking",
+                             "inference_geo", "extended_thinking", "budget_tokens"}
         create_kwargs = {
             "model": kwargs.get("model", self.model),
             "messages": formatted_messages,
             "max_tokens": kwargs.get("max_tokens", 1024),
-            **{k: v for k, v in kwargs.items() if k not in ["model", "max_tokens", "system"]}
+            **{k: v for k, v in kwargs.items() if k not in _passthrough_skip}
         }
+
         if system_parts:
             create_kwargs["system"] = "\n\n".join(system_parts)
         elif "system" in kwargs:
             create_kwargs["system"] = kwargs["system"]
+
+        # Extended thinking — Claude 4.x
+        # Opus 4.6 uses adaptive thinking; Sonnet 4.x / Opus 4.5 use enabled + budget_tokens
+        if "thinking" in kwargs:
+            create_kwargs["thinking"] = kwargs["thinking"]
+        elif kwargs.get("extended_thinking"):
+            model_name = create_kwargs["model"]
+            if "opus-4-6" in model_name:
+                create_kwargs["thinking"] = {"type": "adaptive"}
+            else:
+                budget = kwargs.get("budget_tokens", 5000)
+                create_kwargs["thinking"] = {"type": "enabled", "budget_tokens": budget}
+
+        # effort parameter — GA as of Feb 5, 2026; controls thinking depth on Opus 4.6
+        if "effort" in kwargs:
+            create_kwargs["effort"] = kwargs["effort"]
+
+        # Data residency — specify inference geography (inference_geo)
+        if "inference_geo" in kwargs:
+            create_kwargs["inference_geo"] = kwargs["inference_geo"]
 
         response = self.client.messages.create(**create_kwargs)
 
@@ -108,18 +132,50 @@ class AnthropicProvider(BaseLLMProvider):
         elif "system" in kwargs:
             stream_kwargs["system"] = kwargs["system"]
 
+        # Extended thinking / effort / inference_geo for streaming
+        if "thinking" in kwargs:
+            stream_kwargs["thinking"] = kwargs["thinking"]
+        elif kwargs.get("extended_thinking"):
+            model_name = stream_kwargs["model"]
+            if "opus-4-6" in model_name:
+                stream_kwargs["thinking"] = {"type": "adaptive"}
+            else:
+                budget = kwargs.get("budget_tokens", 5000)
+                stream_kwargs["thinking"] = {"type": "enabled", "budget_tokens": budget}
+        if "effort" in kwargs:
+            stream_kwargs["effort"] = kwargs["effort"]
+        if "inference_geo" in kwargs:
+            stream_kwargs["inference_geo"] = kwargs["inference_geo"]
+
         with self.client.messages.stream(**stream_kwargs) as stream:
             for text in stream.text_stream:
                 yield text
 
     def list_models(self) -> List[str]:
-        """List available Claude models."""
+        """List available Claude models (as of Feb 2026).
+
+        Retired and no longer available:
+        - claude-3-7-sonnet (retired Feb 19, 2026)
+        - claude-3-5-haiku-20241022 (retired Feb 19, 2026)
+        - claude-3-opus-20240229 (retired Jan 5, 2026)
+        - claude-3-5-sonnet-20240620/20241022 (retired Oct 28, 2025)
+        - claude-2.x, claude-3-sonnet-20240229 (retired Jul 21, 2025)
+        """
         return [
-            "claude-3-5-sonnet-20241022",
-            "claude-3-5-haiku-20241022",
+            # Claude 4.6 — current generation
+            "claude-opus-4-6",
+            "claude-sonnet-4-6",
+            # Claude 4.5 — previous generation, still available
+            "claude-opus-4-5-20251101",
+            "claude-sonnet-4-5-20250929",
+            "claude-haiku-4-5-20251001",
+            # Claude 4.1 — available
+            "claude-opus-4-1-20250805",
+            # Claude 4.0 — available
+            "claude-sonnet-4-20250514",
+            "claude-opus-4-20250514",
+            # Claude 3 Haiku — deprecated, retires Apr 19, 2026
             "claude-3-haiku-20240307",
-            "claude-3-sonnet-20240229",
-            "claude-3-opus-20240229",
         ]
 
     def analyze_image(self, image: Union[str, bytes], prompt: str = "Describe this image", **kwargs) -> CompletionResponse:

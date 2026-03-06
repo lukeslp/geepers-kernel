@@ -45,13 +45,17 @@ class OllamaProvider(BaseLLMProvider):
             model: Default model name (e.g., 'llama3.2', 'llava'). If not provided,
                    will use first available model.
         """
-        # Initialize with dummy API key (not used by Ollama)
+        # Initialize with dummy API key (not used by local Ollama)
         super().__init__(api_key=api_key or "local", model=model)
 
         # Determine Ollama host from environment or use default
         self.host = os.environ.get('OLLAMA_HOST', 'http://localhost:11434')
         self.available = False
         self.cached_models = []
+
+        # Optional Bearer token for hosted Ollama-compatible endpoints (e.g. api.assisted.space)
+        _raw_key = api_key if (api_key and api_key != "local") else os.environ.get('OLLAMA_API_KEY')
+        self._auth_headers = {'Authorization': f'Bearer {_raw_key}'} if _raw_key else {}
 
         # Check if Ollama server is running
         self.available = self._check_availability()
@@ -70,7 +74,7 @@ class OllamaProvider(BaseLLMProvider):
     def _check_availability(self) -> bool:
         """Check if Ollama server is available."""
         try:
-            response = requests.get(f"{self.host}/api/tags", timeout=5)
+            response = requests.get(f"{self.host}/api/tags", headers=self._auth_headers, timeout=5)
             return response.status_code == 200
         except Exception as e:
             logger.debug(f"Ollama server not available: {str(e)}")
@@ -85,7 +89,7 @@ class OllamaProvider(BaseLLMProvider):
         """
         models = []
         try:
-            response = requests.get(f"{self.host}/api/tags", timeout=5)
+            response = requests.get(f"{self.host}/api/tags", headers=self._auth_headers, timeout=5)
             if response.status_code == 200:
                 data = response.json()
                 for model in data.get("models", []):
@@ -123,6 +127,7 @@ class OllamaProvider(BaseLLMProvider):
             response = requests.post(
                 f"{self.host}/api/show",
                 json={"name": model_name},
+                headers=self._auth_headers,
                 timeout=5
             )
             if response.status_code == 200:
@@ -247,6 +252,7 @@ class OllamaProvider(BaseLLMProvider):
             response = requests.post(
                 f"{self.host}/api/chat",
                 json=payload,
+                headers=self._auth_headers,
                 timeout=120
             )
 
@@ -327,6 +333,7 @@ class OllamaProvider(BaseLLMProvider):
             with requests.post(
                 f"{self.host}/api/chat",
                 json=payload,
+                headers=self._auth_headers,
                 stream=True,
                 timeout=120
             ) as response:
@@ -447,6 +454,7 @@ class OllamaProvider(BaseLLMProvider):
             response = requests.post(
                 f"{self.host}/api/chat",
                 json=payload,
+                headers=self._auth_headers,
                 timeout=120
             )
 

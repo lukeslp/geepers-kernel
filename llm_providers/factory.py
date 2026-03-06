@@ -89,14 +89,6 @@ PROVIDER_CAPABILITIES = {
         'tts': False,
         'embedding': True
     },
-    'manus': {
-        'chat': True,
-        'streaming': True,
-        'image_generation': False,
-        'vision': True,
-        'tts': False,
-        'embedding': False
-    },
     'elevenlabs': {
         'chat': False,
         'streaming': False,
@@ -142,22 +134,22 @@ PROVIDER_CAPABILITIES = {
 }
 
 
-# Model complexity tiers for cost optimization (Updated January 2026)
+# Model complexity tiers for cost optimization (Updated March 2026)
 COMPLEXITY_TIERS = {
     'openai': {
-        'simple': 'gpt-4o-mini',          # Fast, cheap, good for simple tasks
-        'medium': 'gpt-4o',               # Balanced quality/cost
-        'complex': 'gpt-4o'               # Best general purpose
+        'simple': 'gpt-5-mini',           # Fast, cheap
+        'medium': 'gpt-5.4',              # Balanced quality/cost
+        'complex': 'gpt-5.4'              # Best general purpose
     },
     'anthropic': {
-        'simple': 'claude-3-haiku-20240307',      # Fast, cheap
-        'medium': 'claude-3-5-sonnet-20241022',   # Balanced
-        'complex': 'claude-3-5-sonnet-20241022'   # Best general purpose
+        'simple': 'claude-haiku-4-5-20251001',    # Fast, cheap (Haiku 3 retires Apr 2026)
+        'medium': 'claude-sonnet-4-6',            # Balanced
+        'complex': 'claude-opus-4-6'              # Most capable
     },
     'xai': {
         'simple': 'grok-3-mini',          # Fast, efficient
         'medium': 'grok-3',               # Full capability
-        'complex': 'grok-3'               # Best reasoning
+        'complex': 'grok-4'               # Flagship
     },
     'groq': {
         'simple': 'llama-3.3-70b-versatile',
@@ -170,9 +162,9 @@ COMPLEXITY_TIERS = {
         'complex': 'mistral-large-latest'     # Full capability
     },
     'gemini': {
-        'simple': 'gemini-2.0-flash',         # Fast, efficient
-        'medium': 'gemini-2.0-flash',         # Good balance
-        'complex': 'gemini-2.5-pro'           # Full capability
+        'simple': 'gemini-3.1-flash-lite-preview',   # Fast, efficient
+        'medium': 'gemini-3-flash-preview',          # Good balance
+        'complex': 'gemini-3.1-pro-preview'          # Most capable
     },
     'cohere': {
         'simple': 'command-r7b-12-2024',      # Small, fast
@@ -188,11 +180,6 @@ COMPLEXITY_TIERS = {
         'simple': 'microsoft/Phi-3-mini-4k-instruct',
         'medium': 'mistralai/Mixtral-8x7B-Instruct-v0.1',
         'complex': 'meta-llama/Llama-3.2-3B-Instruct'
-    },
-    'manus': {
-        'simple': 'manus-1.5',
-        'medium': 'manus-1.5',
-        'complex': 'manus-1.5'
     },
     'ollama': {
         'simple': 'llama3.2',
@@ -302,12 +289,6 @@ class ProviderFactory:
             pass
 
         try:
-            from .manus_provider import ManusProvider
-            providers['manus'] = ManusProvider
-        except ImportError:
-            pass
-
-        try:
             from .elevenlabs_provider import ElevenLabsProvider
             providers['elevenlabs'] = ElevenLabsProvider
         except ImportError:
@@ -405,7 +386,7 @@ class ProviderFactory:
 
         Example:
             vision_providers = ProviderFactory.find_providers_with_capability('vision')
-            # Returns: ['openai', 'anthropic', 'xai', 'huggingface', 'manus', 'claude_code']
+            # Returns: ['openai', 'anthropic', 'xai', 'huggingface', 'claude_code']
 
             tts_providers = ProviderFactory.find_providers_with_capability('tts')
             # Returns: ['elevenlabs']

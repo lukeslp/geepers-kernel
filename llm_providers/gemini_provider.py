@@ -24,7 +24,7 @@ class GroundedResponse:
 class GeminiProvider(BaseLLMProvider):
     """Google Gemini provider."""
 
-    DEFAULT_MODEL = "gemini-2.0-flash"
+    DEFAULT_MODEL = "gemini-3-flash-preview"
 
     def __init__(self, api_key: str = None, model: str = None):
         api_key = api_key or os.getenv("GEMINI_API_KEY")
@@ -133,14 +133,17 @@ class GeminiProvider(BaseLLMProvider):
         except Exception:
             # Fallback list of known models (2025)
             return [
+                # Gemini 2.5 (current)
                 "gemini-2.5-pro",
                 "gemini-2.5-flash",
                 "gemini-2.5-flash-lite",
-                "gemini-2.0-pro",
+                # Gemini 2.0
                 "gemini-2.0-flash",
                 "gemini-2.0-flash-lite",
+                # Gemini 1.5 (previous gen)
                 "gemini-1.5-pro",
                 "gemini-1.5-flash",
+                "gemini-1.5-flash-8b",
             ]
 
     def _get_generation_config(self, kwargs: Dict[str, Any]) -> Dict[str, Any]:
@@ -164,13 +167,13 @@ class GeminiProvider(BaseLLMProvider):
             image: Base64-encoded string or raw bytes
             prompt: Question about the image
             **kwargs: Optional parameters
-                - model: Vision model (default: "gemini-2.0-flash")
+                - model: Vision model (default: "gemini-2.5-flash")
                 - max_tokens: Maximum response length
 
         Returns:
             CompletionResponse with image analysis
         """
-        model_name = kwargs.get("model", "gemini-2.0-flash")
+        model_name = kwargs.get("model", self.DEFAULT_MODEL)
         max_tokens = kwargs.get("max_tokens", 1024)
 
         # Convert bytes to base64 if needed

@@ -13,7 +13,7 @@ import base64
 class OpenAIProvider(BaseLLMProvider):
     """OpenAI GPT provider."""
 
-    DEFAULT_MODEL = "gpt-4o"
+    DEFAULT_MODEL = "gpt-5.4"
 
     def __init__(self, api_key: str = None, model: str = None):
         api_key = api_key or os.getenv("OPENAI_API_KEY")
@@ -36,10 +36,20 @@ class OpenAIProvider(BaseLLMProvider):
             for msg in messages
         ]
 
+        model = kwargs.get("model", self.model)
+        params = {k: v for k, v in kwargs.items() if k != "model"}
+        is_reasoning = any(model.startswith(p) for p in ('o1', 'o3', 'o4')) and 'gpt-4o' not in model
+        if is_reasoning:
+            params.pop('temperature', None)
+            params.pop('top_p', None)
+            if 'max_tokens' in params:
+                params['max_completion_tokens'] = params.pop('max_tokens')
+            params.setdefault('reasoning_effort', 'medium')
+
         response = self.client.chat.completions.create(
-            model=kwargs.get("model", self.model),
+            model=model,
             messages=formatted_messages,
-            **{k: v for k, v in kwargs.items() if k != "model"}
+            **params
         )
 
         return CompletionResponse(
@@ -63,11 +73,21 @@ class OpenAIProvider(BaseLLMProvider):
             for msg in messages
         ]
 
+        model = kwargs.get("model", self.model)
+        params = {k: v for k, v in kwargs.items() if k not in ["model", "stream"]}
+        is_reasoning = any(model.startswith(p) for p in ('o1', 'o3', 'o4')) and 'gpt-4o' not in model
+        if is_reasoning:
+            params.pop('temperature', None)
+            params.pop('top_p', None)
+            if 'max_tokens' in params:
+                params['max_completion_tokens'] = params.pop('max_tokens')
+            params.setdefault('reasoning_effort', 'medium')
+
         stream = self.client.chat.completions.create(
-            model=kwargs.get("model", self.model),
+            model=model,
             messages=formatted_messages,
             stream=True,
-            **{k: v for k, v in kwargs.items() if k not in ["model", "stream"]}
+            **params
         )
 
         for chunk in stream:

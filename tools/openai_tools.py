@@ -71,8 +71,8 @@ class OpenAITools(ToolModuleBase):
                             },
                             "model": {
                                 "type": "string",
-                                "description": "Model to use (e.g., gpt-4, gpt-4o-mini)",
-                                "default": "gpt-4"
+                                "description": "Model to use (e.g., gpt-4o, gpt-4o-mini)",
+                                "default": "gpt-4o"
                             },
                             "max_tokens": {
                                 "type": "integer",
@@ -167,7 +167,7 @@ class OpenAITools(ToolModuleBase):
     def openai_chat(
         self,
         messages: List[Dict[str, str]],
-        model: str = "gpt-4",
+        model: str = "gpt-4o",
         max_tokens: int = 1024,
         temperature: float = 0.7
     ) -> Dict[str, Any]:

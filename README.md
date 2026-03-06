@@ -1,17 +1,17 @@
-# dr-eamer-ai-shared
+# geepers-kernel
 
 **Unified LLM Development Infrastructure**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![PyPI: dr-eamer-ai-shared](https://img.shields.io/badge/PyPI-dr--eamer--ai--shared-orange.svg)](https://pypi.org/project/dr-eamer-ai-shared/)
+[![PyPI: geepers-kernel](https://img.shields.io/badge/PyPI-geepers--kernel-orange.svg)](https://pypi.org/project/geepers-kernel/)
 [![Status: Production](https://img.shields.io/badge/status-production-brightgreen.svg)]()
 
 ---
 
 ## Overview
 
-`dr-eamer-ai-shared` is the foundational library powering the Dreamwalker MCP ecosystem. (The package name predates our naming conventions.) It provides:
+`geepers-kernel` is the foundational library powering the Dreamwalker MCP ecosystem. It provides:
 
 - **10+ LLM Providers** — Unified interface for Anthropic, OpenAI, xAI, Mistral, Cohere, Gemini, Perplexity, Groq, and more
 - **Multi-Agent Orchestration** — Dream Cascade (hierarchical research) and Dream Swarm (parallel search) patterns
@@ -20,7 +20,7 @@
 - **Document Generation** — Professional PDF, DOCX, and Markdown output with citations
 
 **Status:** Production-ready, actively developed  
-**Package Name:** `dr-eamer-ai-shared` *(published on PyPI)*  
+**Package Name:** `geepers-kernel` *(published on PyPI)*  
 **Documentation:** [dr.eamer.dev/dreamwalker](https://dr.eamer.dev/dreamwalker/)
 
 ---

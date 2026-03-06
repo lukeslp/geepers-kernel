@@ -13,7 +13,7 @@ import base64
 class MistralProvider(BaseLLMProvider):
     """Mistral AI provider."""
 
-    DEFAULT_MODEL = "mistral-large-2411"
+    DEFAULT_MODEL = "mistral-large-latest"
 
     def __init__(self, api_key: str = None, model: str = None):
         api_key = api_key or os.getenv("MISTRAL_API_KEY")
@@ -118,15 +118,17 @@ class MistralProvider(BaseLLMProvider):
             models = response.json().get("data", [])
             return [model["id"] for model in models]
         except Exception:
-            # Fallback list of known models (December 2025)
+            # Fallback list of known models (March 2026)
+            # open-mixtral-8x22b retired November 2025
             return [
                 "mistral-large-latest",
+                "mistral-small-latest",
                 "pixtral-large-latest",
                 "ministral-3b-latest",
                 "ministral-8b-latest",
-                "pixtral-12b-2409",
-                "open-mixtral-8x22b",
                 "codestral-latest",
+                "magistral-medium-latest",
+                "magistral-small-latest",
             ]
 
     def analyze_image(self, image: Union[str, bytes], prompt: str = "Describe this image", **kwargs) -> CompletionResponse:

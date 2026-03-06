@@ -78,13 +78,13 @@ class PerplexityProvider(BaseLLMProvider):
 
     def list_models(self) -> List[str]:
         """List available Perplexity models."""
-        # Perplexity doesn't provide a models endpoint, return known models (2025 Sonar API)
+        # Perplexity doesn't provide a models endpoint, return known models (March 2026)
         return [
             "sonar-pro",
             "sonar",
             "sonar-reasoning-pro",
-            "llama-3.1-sonar-large-128k-online",
-            "llama-3.1-sonar-small-128k-online",
+            "sonar-reasoning",
+            "sonar-deep-research",
         ]
 
     def analyze_image(self, image: Union[str, bytes], prompt: str = "Describe this image", **kwargs) -> CompletionResponse:

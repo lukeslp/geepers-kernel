@@ -411,7 +411,7 @@ class ProvidersServer:
         return [
             {
                 "name": "list_available_providers",
-                "description": "List all available LLM providers (anthropic, openai, xai, mistral, cohere, gemini, perplexity, groq, huggingface, elevenlabs, manus)",
+                "description": "List all available LLM providers (anthropic, openai, xai, mistral, cohere, gemini, perplexity, groq, huggingface, elevenlabs)",
                 "inputSchema": {
                     "type": "object",
                     "properties": {}
@@ -425,7 +425,7 @@ class ProvidersServer:
                     "properties": {
                         "provider_name": {
                             "type": "string",
-                            "description": "Provider name (anthropic, openai, xai, mistral, cohere, gemini, perplexity, groq, huggingface, elevenlabs, manus)"
+                            "description": "Provider name (anthropic, openai, xai, mistral, cohere, gemini, perplexity, groq, huggingface, elevenlabs)"
                         },
                         "model": {
                             "type": "string",
