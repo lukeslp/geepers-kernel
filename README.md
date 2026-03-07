@@ -11,13 +11,13 @@
 
 ## Overview
 
-`geepers-kernel` is the foundational library powering the Dreamwalker MCP ecosystem. It provides:
+`geepers-kernel` is the core library behind the Dreamwalker MCP ecosystem. It provides:
 
 - **10+ LLM Providers** — Unified interface for Anthropic, OpenAI, xAI, Mistral, Cohere, Gemini, Perplexity, Groq, and more
 - **Multi-Agent Orchestration** — Dream Cascade (hierarchical research) and Dream Swarm (parallel search) patterns
 - **15+ Data Sources** — Structured API clients for arXiv, Semantic Scholar, Census, GitHub, NASA, and more
 - **MCP Server Infrastructure** — Model Context Protocol servers exposing tools via stdio/HTTP
-- **Document Generation** — Professional PDF, DOCX, and Markdown output with citations
+- **Document Generation** — PDF, DOCX, and Markdown output with citations
 
 **Status:** Production-ready, actively developed  
 **Package Name:** `geepers-kernel` *(published on PyPI)*  
@@ -409,6 +409,7 @@ Built with:
 **Website:** [dr.eamer.dev](https://dr.eamer.dev)
 
 ---
+
 
 
 
