@@ -56,7 +56,7 @@ config.py ───────────────────────�
     │       ├── sequential/conditional/iterative ── Other patterns
     │       └── dreamer_*.py ──────────────────────── Legacy aliases
     │
-    ├── data_fetching/  ── ClientFactory ─────────── 18 API clients (arxiv, census, github,
+    ├── data_fetching/  ── ClientFactory ─────────── 17 API clients (arxiv, census, github,
     │       │                                         nasa, news, wikipedia, pubmed, wolfram,
     │       │                                         semantic_scholar, weather, youtube,
     │       │                                         openlibrary, finance, fec, judiciary,
