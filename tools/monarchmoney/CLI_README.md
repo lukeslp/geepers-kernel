@@ -1,6 +1,6 @@
 # Monarch Money CLI Tool
 
-A beautiful command-line interface for managing your Monarch Money finances with LLM-powered insights.
+Command-line interface for managing your Monarch Money finances with LLM-powered insights.
 
 ## Features
 
