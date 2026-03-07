@@ -29,9 +29,9 @@ cd /home/coolhand/shared/mcp && python unified_server.py   # Port 5060
 
 ## Overview
 
-Python library published as **`geepers-kernel`** (PyPI, v1.2.0). Previously `dr-eamer-ai-shared` / `geepers-core`. Provides reusable LLM, orchestration, data fetching, and web infrastructure for all projects on dr.eamer.dev.
+Python library published as **`geepers-kernel`** (PyPI, v1.2.0). Provides reusable LLM, orchestration, data fetching, and web infrastructure for all projects on dr.eamer.dev.
 
-**Each module has its own CLAUDE.md** with detailed API docs and code examples. This file covers cross-cutting architecture and what you need to know across modules.
+**Each module has its own CLAUDE.md** with detailed API docs and code examples. This file covers cross-cutting architecture.
 
 ## Architecture
 
@@ -151,25 +151,7 @@ from web import create_health_endpoint, setup_cors
 
 ## Tests
 
-16 test files in `tests/`:
-
-| File | Tests |
-|------|-------|
-| `test_providers.py` | LLM provider factory and completion |
-| `test_ollama_provider.py` | Local Ollama provider |
-| `test_orchestrators.py` | Orchestrator patterns |
-| `test_data_tool_modules.py` | Data fetching tool wrappers |
-| `test_tool_registry.py` | Tool registration and execution |
-| `test_provider_tools.py` | Provider tool modules |
-| `test_vision.py`, `test_image_vision.py` | Vision utilities |
-| `test_embeddings.py` | Embedding generation |
-| `test_document_parsers.py` | PDF/DOCX/TXT parsing |
-| `test_multi_search.py` | Parallel search |
-| `test_shared_imports.py` | Package import validation |
-| `test_time_utils.py` | Time utilities |
-| `test_utils_enhancements.py` | General utility tests |
-| `test_workflow_state.py` | Workflow state management |
-| `test_dreamwalker_app.py` | Dreamwalker web app |
+16 test files in `tests/` covering providers, orchestrators, tools, data fetching, vision, embeddings, document parsing, and utilities. `pytest.ini` sets `testpaths = tests` — root-level test files (`test_providers.py`, `test_image_vision.py`) are excluded from default runs.
 
 ## Extending the Library
 
@@ -200,22 +182,17 @@ from web import create_health_endpoint, setup_cors
 - **Commit format**: `type(scope): message` (e.g., `feat(orchestration): add conditional orchestrator`)
 - API keys: load via `ConfigManager`, store in `/home/coolhand/documentation/API_KEYS.md`
 
-## Documentation
+## Operational Notes
 
-Each module has its own `CLAUDE.md` with full API docs:
-- `llm_providers/CLAUDE.md` - Provider interface, data classes, examples for all 14 providers
-- `orchestration/CLAUDE.md` - All orchestrator patterns with code examples
-- `data_fetching/CLAUDE.md` - All 18 client APIs with usage examples
-- `mcp/CLAUDE.md` - MCP server endpoints, tools, SSE streaming
-- `tools/CLAUDE.md` - Tool registry, module base classes, provider/data tools
-- `utils/CLAUDE.md` - All 16 utility modules with examples
-- `web/CLAUDE.md` - Flask blueprints, auth, CORS, rate limiting, proxy
-- `document_generation/CLAUDE.md` - PDF/DOCX/Markdown generators
+- `sync-to-plugin.sh` — syncs MCP code to the Dreamwalker plugin repo. Run after MCP changes.
+- `remote_mcp/` — remote MCP server variant (`server.py` + `start.sh`).
+- Root-level scripts (`batch_humanize_docs.py`, `doc_humanizer.py`, `humanize_all_docs.py`) are doc tooling, not part of the library.
 
-Additional guides:
-- `orchestration/ORCHESTRATOR_GUIDE.md` - Building custom orchestrators
-- `orchestration/ORCHESTRATOR_SELECTION_GUIDE.md` - Choosing patterns
-- `orchestration/ORCHESTRATOR_BENCHMARKS.md` - Performance data
+## Additional Guides
+
+- `orchestration/ORCHESTRATOR_GUIDE.md` — building custom orchestrators
+- `orchestration/ORCHESTRATOR_SELECTION_GUIDE.md` — choosing patterns
+- `orchestration/ORCHESTRATOR_BENCHMARKS.md` — performance data
 
 ## Version Control
 
