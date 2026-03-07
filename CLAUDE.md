@@ -29,7 +29,7 @@ cd /home/coolhand/shared/mcp && python unified_server.py   # Port 5060
 
 ## Overview
 
-Python library published as **`geepers-core`** (PyPI, v1.0.2). Previously `dr-eamer-ai-shared` - the README still uses the old name. Provides reusable LLM, orchestration, data fetching, and web infrastructure for all projects on dr.eamer.dev.
+Python library published as **`geepers-kernel`** (PyPI, v1.2.0). Previously `dr-eamer-ai-shared` / `geepers-core`. Provides reusable LLM, orchestration, data fetching, and web infrastructure for all projects on dr.eamer.dev.
 
 **Each module has its own CLAUDE.md** with detailed API docs and code examples. This file covers cross-cutting architecture and what you need to know across modules.
 
@@ -43,8 +43,8 @@ config.py ───────────────────────�
     ├── llm_providers/  ── ProviderFactory ──────── BaseLLMProvider implementations
     │       │                                        (14 providers: anthropic, openai, xai,
     │       │                                         mistral, cohere, gemini, perplexity,
-    │       │                                         groq, huggingface, manus, elevenlabs,
-    │       │                                         ollama, gradient, claude_code)
+    │       │                                         groq, huggingface, elevenlabs,
+    │       │                                         ollama, gradient, gradient_v2, claude_code)
     │       │
     │       ├── complexity_router.py ──── Routes tasks to cheap/mid/expensive providers
     │       └── tiered_selector.py ────── Model selection by tier
@@ -151,7 +151,7 @@ from web import create_health_endpoint, setup_cors
 
 ## Tests
 
-17 test files in `tests/`:
+16 test files in `tests/`:
 
 | File | Tests |
 |------|-------|
