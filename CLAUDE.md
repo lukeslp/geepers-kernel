@@ -1,4 +1,7 @@
 # CLAUDE.md
+<!-- Navigation: ~/shared/CLAUDE.md -->
+<!-- Parent: ~/CLAUDE.md -->
+<!-- Map: ~/CLAUDE_MAP.md -->
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -32,6 +35,11 @@ cd /home/coolhand/shared/mcp && python unified_server.py   # Port 5060
 Python library published as **`geepers-kernel`** (PyPI, v1.2.0). Provides reusable LLM, orchestration, data fetching, and web infrastructure for all projects on dr.eamer.dev.
 
 **Each module has its own CLAUDE.md** with detailed API docs and code examples. This file covers cross-cutting architecture.
+
+## Dependencies
+
+**Used by**: All servers/* services, html/alt, html/utilities, projects/wordblocks, projects/predictive-keyboard, geepers/
+**Publishes as**: PyPI `dr-eamer-ai-shared`
 
 ## Architecture
 
