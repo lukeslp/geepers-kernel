@@ -21,6 +21,8 @@ class Message:
     role: str  # "user", "assistant", "system"
     content: str
     metadata: Optional[Dict[str, Any]] = None
+    content_blocks: Optional[List[Any]] = None  # Raw content blocks when tool_use present
+    stop_reason: Optional[str] = None
 
 
 @dataclass
@@ -30,6 +32,8 @@ class CompletionResponse:
     model: str
     usage: Dict[str, int]
     metadata: Optional[Dict[str, Any]] = None
+    content_blocks: Optional[List[Any]] = None  # Raw content blocks when tool_use present
+    stop_reason: Optional[str] = None
 
 
 @dataclass
@@ -39,6 +43,8 @@ class ImageResponse:
     model: str
     revised_prompt: Optional[str] = None  # Some providers revise the prompt
     metadata: Optional[Dict[str, Any]] = None
+    content_blocks: Optional[List[Any]] = None  # Raw content blocks when tool_use present
+    stop_reason: Optional[str] = None
 
 
 @dataclass
@@ -49,7 +55,9 @@ class AudioResponse:
     language: Optional[str] = None  # Detected/specified language
     duration: Optional[float] = None  # Audio duration in seconds
     model: Optional[str] = None  # Model used
-    metadata: Optional[Dict[str, Any]] = None  # Additional provider-specific data
+    metadata: Optional[Dict[str, Any]] = None
+    content_blocks: Optional[List[Any]] = None  # Raw content blocks when tool_use present
+    stop_reason: Optional[str] = None  # Additional provider-specific data
 
 
 @dataclass
@@ -60,6 +68,8 @@ class VisionMessage:
     image_data: Optional[str] = None  # Base64-encoded image
     image_url: Optional[str] = None  # URL to image
     metadata: Optional[Dict[str, Any]] = None
+    content_blocks: Optional[List[Any]] = None  # Raw content blocks when tool_use present
+    stop_reason: Optional[str] = None
 
 
 class BaseLLMProvider(ABC):

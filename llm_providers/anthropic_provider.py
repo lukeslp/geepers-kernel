@@ -100,15 +100,31 @@ class AnthropicProvider(BaseLLMProvider):
 
         response = self.client.messages.create(**create_kwargs)
 
+        # Extract text from first text block (backwards compat)
+        text_parts = [b.text for b in response.content if hasattr(b, "text")]
+        content_text = text_parts[0] if text_parts else ""
+
+        # When tool_use is present, serialize all content blocks for passthrough
+        raw_blocks = None
+        if response.stop_reason == "tool_use":
+            raw_blocks = []
+            for b in response.content:
+                if b.type == "text":
+                    raw_blocks.append({"type": "text", "text": b.text})
+                elif b.type == "tool_use":
+                    raw_blocks.append({"type": "tool_use", "id": b.id, "name": b.name, "input": b.input})
+
         return CompletionResponse(
-            content=response.content[0].text,
+            content=content_text,
             model=response.model,
             usage={
                 "prompt_tokens": response.usage.input_tokens,
                 "completion_tokens": response.usage.output_tokens,
                 "total_tokens": response.usage.input_tokens + response.usage.output_tokens,
             },
-            metadata={"id": response.id, "stop_reason": response.stop_reason}
+            metadata={"id": response.id, "stop_reason": response.stop_reason},
+            content_blocks=raw_blocks,
+            stop_reason=response.stop_reason,
         )
 
     def stream_complete(self, messages: List[Message], **kwargs):
