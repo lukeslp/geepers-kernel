@@ -19,7 +19,6 @@ from datetime import date, timedelta, datetime
 from decimal import Decimal
 
 # Add shared library to path
-sys.path.insert(0, '/home/coolhand/shared')
 
 try:
     from observability import get_cost_tracker, get_metrics_collector

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geepers-kernel"
-version = "1.2.0"
-description = "Foundation library for the geepers ecosystem — LLM providers, config management, data fetching, and utilities"
+version = "1.3.0"
+description = "Foundation library for the geepers ecosystem: LLM providers, config management, data fetching, and utilities"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Luke Steuber", email = "luke@dr.eamer.dev"}]
@@ -44,12 +44,12 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://dr.eamer.dev"
-Documentation = "https://dr.eamer.dev/shared/"
-Repository = "https://github.com/lukeslp/kernel"
-Source = "https://github.com/lukeslp/kernel/tree/master/shared"
-"Bug Reports" = "https://github.com/lukeslp/kernel/issues"
-Changelog = "https://github.com/lukeslp/kernel/blob/master/shared/CLAUDE.md"
+Homepage = "https://github.com/lukeslp/geepers-kernel"
+Documentation = "https://github.com/lukeslp/geepers-kernel#readme"
+Repository = "https://github.com/lukeslp/geepers-kernel"
+Source = "https://github.com/lukeslp/geepers-kernel/tree/master"
+"Bug Reports" = "https://github.com/lukeslp/geepers-kernel/issues"
+Changelog = "https://github.com/lukeslp/geepers-kernel/blob/master/CHANGELOG.md"
 
 [project.optional-dependencies]
 anthropic = ["anthropic>=0.71.0"]
@@ -80,7 +80,7 @@ all = [
 
 [tool.setuptools]
 # Explicitly list all packages - setuptools isn't finding the root package
-packages = ["shared", "shared.data_fetching", "shared.llm_providers", "shared.mcp", "shared.memory", "shared.observability", "shared.tools", "shared.utils", "shared.web"]
+packages = ["shared", "shared.data_fetching", "shared.llm_providers", "shared.api_auth", "shared.document_generation", "shared.mcp", "shared.mcp.stdio_servers", "shared.memory", "shared.observability", "shared.tools", "shared.utils", "shared.web"]
 package-dir = {"shared" = "."}
 
 [tool.setuptools.package-data]

@@ -23,9 +23,8 @@ from datetime import datetime
 
 # Import from shared library
 import sys
-sys.path.insert(0, '/home/coolhand/shared')
-from memory import RedisManager
-from config import ConfigManager
+from shared.memory import RedisManager
+from shared.config import ConfigManager
 
 logger = logging.getLogger(__name__)
 

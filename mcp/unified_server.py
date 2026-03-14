@@ -33,7 +33,6 @@ import uuid
 
 # Import from shared library
 import sys
-sys.path.insert(0, '/home/coolhand/shared')
 
 # Import background loop for persistent async execution
 try:
@@ -41,7 +40,7 @@ try:
 except ImportError:
     from mcp.background_loop import submit_background_task
 
-from orchestration import (
+from shared.orchestration import (
     DreamCascadeOrchestrator,
     DreamSwarmOrchestrator,
     DreamCascadeConfig,
@@ -61,9 +60,9 @@ try:
 except ImportError:
     from mcp.streaming import StreamingBridge, WebhookManager, get_streaming_bridge, get_webhook_manager
     from mcp.tool_registry import ToolRegistry, get_tool_registry
-from llm_providers.factory import ProviderFactory
-from llm_providers.tiered_selector import TieredProviderSelector, get_optimal_models_for_workflow
-from config import ConfigManager
+from shared.llm_providers.factory import ProviderFactory
+from shared.llm_providers.tiered_selector import TieredProviderSelector, get_optimal_models_for_workflow
+from shared.config import ConfigManager
 
 logger = logging.getLogger(__name__)
 

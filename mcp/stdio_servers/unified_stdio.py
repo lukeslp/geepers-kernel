@@ -14,10 +14,9 @@ import logging
 from typing import Dict, Any
 
 # Add parent to path for imports
-sys.path.insert(0, '/home/coolhand/geepers')
 
-from geepers.mcp.unified_server import UnifiedMCPServer
-from geepers.config import ConfigManager
+from shared.mcp.unified_server import UnifiedMCPServer
+from shared.config import ConfigManager
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)

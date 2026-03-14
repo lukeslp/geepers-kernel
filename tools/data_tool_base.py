@@ -9,8 +9,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
-from config import ConfigManager
-from data_fetching.factory import DataFetchingFactory
+from shared.config import ConfigManager
+from shared.data_fetching.factory import DataFetchingFactory
 
 from .module_base import ToolModuleBase
 

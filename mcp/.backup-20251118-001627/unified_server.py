@@ -33,9 +33,8 @@ import uuid
 
 # Import from shared library
 import sys
-sys.path.insert(0, '/home/coolhand/shared')
 
-from orchestration import (
+from shared.orchestration import (
     BeltalowdaOrchestrator,
     SwarmOrchestrator,
     BeltalowdaConfig,
@@ -46,10 +45,10 @@ from orchestration import (
     StreamEvent,
     EventType
 )
-from mcp.streaming import StreamingBridge, WebhookManager, get_streaming_bridge, get_webhook_manager
-from mcp.tool_registry import ToolRegistry, get_tool_registry
-from llm_providers.factory import ProviderFactory
-from config import ConfigManager
+from shared.mcp.streaming import StreamingBridge, WebhookManager, get_streaming_bridge, get_webhook_manager
+from shared.mcp.tool_registry import ToolRegistry, get_tool_registry
+from shared.llm_providers.factory import ProviderFactory
+from shared.config import ConfigManager
 
 logger = logging.getLogger(__name__)
 

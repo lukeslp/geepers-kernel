@@ -50,18 +50,17 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 # Add shared to path
-sys.path.insert(0, '/home/coolhand/shared')
 
-from mcp import (
+from shared.mcp import (
     UnifiedMCPServer,
     register_streaming_routes,
     get_streaming_bridge,
     get_webhook_manager
 )
-from mcp.data_server import DataServer
-from mcp.cache_server import CacheServer
-from mcp.utility_server import UtilityServer
-from mcp.background_loop import get_background_loop
+from shared.mcp.data_server import DataServer
+from shared.mcp.cache_server import CacheServer
+from shared.mcp.utility_server import UtilityServer
+from shared.mcp.background_loop import get_background_loop
 
 # Configure logging
 logging.basicConfig(

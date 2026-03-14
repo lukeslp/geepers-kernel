@@ -22,9 +22,8 @@ from typing import Dict, List, Optional, Any
 
 # Import from shared library
 import sys
-sys.path.insert(0, '/home/coolhand/shared')
-from config import ConfigManager
-from llm_providers.factory import ProviderFactory
+from shared.config import ConfigManager
+from shared.llm_providers.factory import ProviderFactory
 
 logger = logging.getLogger(__name__)
 

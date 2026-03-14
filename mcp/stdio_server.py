@@ -37,11 +37,10 @@ import logging
 from typing import Dict, Any, List, Optional
 
 # Add shared library to path
-sys.path.insert(0, '/home/coolhand/shared')
 
 # Import master server
-from mcp.master_server import get_master_server
-from config import ConfigManager
+from shared.mcp.master_server import get_master_server
+from shared.config import ConfigManager
 
 # Setup logging to stderr (stdout is used for MCP protocol)
 logging.basicConfig(

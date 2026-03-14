@@ -25,9 +25,8 @@ from datetime import datetime
 
 # Import from shared library
 import sys
-sys.path.insert(0, '/home/coolhand/shared')
-from data_fetching import CensusClient, ArxivClient, SemanticScholarClient, ArchiveClient
-from config import ConfigManager
+from shared.data_fetching import CensusClient, ArxivClient, SemanticScholarClient, ArchiveClient
+from shared.config import ConfigManager
 
 logger = logging.getLogger(__name__)
 
@@ -497,7 +496,7 @@ class DataServer:
     def get_finance_client(self) -> 'FinanceClient':
         """Get or create Finance client."""
         if not hasattr(self, '_finance_client') or self._finance_client is None:
-            from data_fetching import FinanceClient
+            from shared.data_fetching import FinanceClient
             self._finance_client = FinanceClient()
         return self._finance_client
 
@@ -555,7 +554,7 @@ class DataServer:
     def get_github_client(self) -> 'GitHubClient':
         """Get or create GitHub client."""
         if not hasattr(self, '_github_client') or self._github_client is None:
-            from data_fetching import GitHubClient
+            from shared.data_fetching import GitHubClient
             self._github_client = GitHubClient()
         return self._github_client
 
@@ -613,7 +612,7 @@ class DataServer:
     def get_nasa_client(self) -> 'NASAClient':
         """Get or create NASA client."""
         if not hasattr(self, '_nasa_client') or self._nasa_client is None:
-            from data_fetching import NASAClient
+            from shared.data_fetching import NASAClient
             self._nasa_client = NASAClient()
         return self._nasa_client
 
@@ -660,7 +659,7 @@ class DataServer:
     def get_news_client(self) -> 'NewsClient':
         """Get or create News client."""
         if not hasattr(self, '_news_client') or self._news_client is None:
-            from data_fetching import NewsClient
+            from shared.data_fetching import NewsClient
             self._news_client = NewsClient()
         return self._news_client
 
@@ -718,7 +717,7 @@ class DataServer:
     def get_openlibrary_client(self) -> 'OpenLibraryClient':
         """Get or create OpenLibrary client."""
         if not hasattr(self, '_openlibrary_client') or self._openlibrary_client is None:
-            from data_fetching import OpenLibraryClient
+            from shared.data_fetching import OpenLibraryClient
             self._openlibrary_client = OpenLibraryClient()
         return self._openlibrary_client
 
@@ -771,7 +770,7 @@ class DataServer:
     def get_weather_client(self) -> 'WeatherClient':
         """Get or create Weather client."""
         if not hasattr(self, '_weather_client') or self._weather_client is None:
-            from data_fetching import WeatherClient
+            from shared.data_fetching import WeatherClient
             self._weather_client = WeatherClient()
         return self._weather_client
 
@@ -826,7 +825,7 @@ class DataServer:
     def get_wikipedia_client(self) -> 'WikipediaClient':
         """Get or create Wikipedia client."""
         if not hasattr(self, '_wikipedia_client') or self._wikipedia_client is None:
-            from data_fetching import WikipediaClient
+            from shared.data_fetching import WikipediaClient
             self._wikipedia_client = WikipediaClient()
         return self._wikipedia_client
 
@@ -881,7 +880,7 @@ class DataServer:
     def get_youtube_client(self) -> 'YouTubeClient':
         """Get or create YouTube client."""
         if not hasattr(self, '_youtube_client') or self._youtube_client is None:
-            from data_fetching import YouTubeClient
+            from shared.data_fetching import YouTubeClient
             self._youtube_client = YouTubeClient()
         return self._youtube_client
 

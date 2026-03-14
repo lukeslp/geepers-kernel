@@ -12,10 +12,9 @@ import json
 import logging
 from typing import Dict, Any
 
-sys.path.insert(0, '/home/coolhand/geepers')
 
-from geepers.mcp.cache_server import CacheServer
-from geepers.config import ConfigManager
+from shared.mcp.cache_server import CacheServer
+from shared.config import ConfigManager
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

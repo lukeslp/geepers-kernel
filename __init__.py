@@ -8,4 +8,4 @@ This library provides common functionality across multiple projects including:
 - Utilities for configuration and retry logic
 """
 
-__version__ = "1.0.0"
+__version__ = "1.3.0"

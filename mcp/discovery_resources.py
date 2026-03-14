@@ -18,9 +18,8 @@ import logging
 from typing import Dict, List, Any, Optional
 import sys
 
-sys.path.insert(0, '/home/coolhand/shared')
-from config import ConfigManager
-from llm_providers.factory import ProviderFactory, PROVIDER_CAPABILITIES
+from shared.config import ConfigManager
+from shared.llm_providers.factory import ProviderFactory, PROVIDER_CAPABILITIES
 from .tool_metadata import TOOL_METADATA, get_tools_by_category
 
 logger = logging.getLogger(__name__)

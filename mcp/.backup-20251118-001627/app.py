@@ -46,9 +46,8 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 # Add shared to path
-sys.path.insert(0, '/home/coolhand/shared')
 
-from mcp import (
+from shared.mcp import (
     UnifiedMCPServer,
     register_streaming_routes,
     get_streaming_bridge,

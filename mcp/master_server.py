@@ -24,8 +24,7 @@ from .tool_metadata import enrich_tool_manifest
 
 # Import shared library
 import sys
-sys.path.insert(0, '/home/coolhand/shared')
-from config import ConfigManager
+from shared.config import ConfigManager
 
 logger = logging.getLogger(__name__)
 

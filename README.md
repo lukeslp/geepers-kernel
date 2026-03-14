@@ -4,9 +4,9 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyPI](https://img.shields.io/badge/PyPI-geepers--kernel-orange.svg)](https://pypi.org/project/geepers-kernel/)
 
-Core library for the Dreamwalker MCP ecosystem. Unified interface to 10+ LLM providers, multi-agent orchestration patterns, 15+ structured data API clients, and MCP server infrastructure.
+Core library for the geepers ecosystem. Unified interface to 10+ LLM providers, multi-agent orchestration patterns, 15+ structured data API clients, and MCP server infrastructure.
 
-**Documentation:** [dr.eamer.dev/dreamwalker](https://dr.eamer.dev/dreamwalker/)  
+**Documentation:** [dr.eamer.dev/geepers](https://github.com/lukeslp/geepers-kernel)  
 **Author:** Luke Steuber
 
 ---
@@ -84,16 +84,16 @@ data = census.get_demographics(geography='state:06')
 
 | Provider | Chat | Vision | Image Gen |
 |----------|------|--------|-----------|
-| Anthropic (Claude) | ✓ | ✓ | — |
+| Anthropic (Claude) | ✓ | ✓ | , |
 | OpenAI (GPT-4) | ✓ | ✓ | ✓ |
 | xAI (Grok) | ✓ | ✓ | ✓ |
-| Mistral | ✓ | ✓ | — |
-| Cohere | ✓ | — | — |
-| Google (Gemini) | ✓ | ✓ | — |
-| Perplexity | ✓ | ✓ | — |
-| Groq (Llama) | ✓ | — | — |
+| Mistral | ✓ | ✓ | , |
+| Cohere | ✓ | , | , |
+| Google (Gemini) | ✓ | ✓ | , |
+| Perplexity | ✓ | ✓ | , |
+| Groq (Llama) | ✓ | , | , |
 | HuggingFace | ✓ | ✓ | ✓ |
-| DeepSeek | ✓ | — | — |
+| DeepSeek | ✓ | , | , |
 
 Complexity router selects models automatically based on task requirements.
 
@@ -127,12 +127,12 @@ Complexity router selects models automatically based on task requirements.
 
 Four MCP servers expose the library's capabilities via stdio/HTTP:
 
-- `dreamwalker-unified` — orchestration (Dream Cascade, Dream Swarm)
-- `dreamwalker-providers` — direct LLM provider access
-- `dreamwalker-data` — data fetching tools
-- `dreamwalker-websearch` — web search (Brave, SerpAPI)
+- `geepers-unified` , orchestration (Dream Cascade, Dream Swarm)
+- `geepers-providers` , direct LLM provider access
+- `geepers-data` , data fetching tools
+- `geepers-websearch` , web search (Brave, SerpAPI)
 
-See [MCP Guide](https://dr.eamer.dev/dreamwalker/mcp/) for configuration.
+See [MCP Guide](https://github.com/lukeslp/geepers-kernelmcp/) for configuration.
 
 ---
 
@@ -155,7 +155,7 @@ geepers-kernel/
 |---------|--------|----------|
 | Orchestration workflows | `dream-*` | `dream-cascade`, `dream-swarm` |
 | Data tools | `dream_of_*` | `dream_of_arxiv`, `dream_of_census_acs` |
-| Management tools | `dreamwalker_*` | `dreamwalker_status`, `dreamwalker_cancel` |
+| Management tools | `geepers_*` | `geepers_status`, `geepers_cancel` |
 
 ---
 

@@ -20,11 +20,10 @@ from pathlib import Path
 
 # Import from shared library
 import sys
-sys.path.insert(0, '/home/coolhand/shared')
-from utils.document_parsers import parse_file, is_supported_file, get_supported_extensions
-from utils.multi_search import MultiSearchOrchestrator
-from utils.citation import Citation, CitationManager
-from config import ConfigManager
+from shared.utils.document_parsers import parse_file, is_supported_file, get_supported_extensions
+from shared.utils.multi_search import MultiSearchOrchestrator
+from shared.utils.citation import Citation, CitationManager
+from shared.config import ConfigManager
 
 logger = logging.getLogger(__name__)
 

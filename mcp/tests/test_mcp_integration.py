@@ -15,12 +15,11 @@ import sys
 from pathlib import Path
 
 # Add shared library to path
-sys.path.insert(0, '/home/coolhand/shared')
 
-from mcp.master_server import MasterMCPServer, get_master_server
-from mcp.tool_metadata import get_tool_metadata, get_tools_by_category, get_cost_estimate
-from mcp.discovery_resources import DiscoveryResources
-from config import ConfigManager
+from shared.mcp.master_server import MasterMCPServer, get_master_server
+from shared.mcp.tool_metadata import get_tool_metadata, get_tools_by_category, get_cost_estimate
+from shared.mcp.discovery_resources import DiscoveryResources
+from shared.config import ConfigManager
 
 
 class TestMasterServer:

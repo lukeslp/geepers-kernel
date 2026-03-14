@@ -14,11 +14,10 @@ from datetime import datetime
 
 # Import shared library providers
 import sys
-sys.path.insert(0, '/home/coolhand/shared')
-from llm_providers import Message
-from llm_providers.anthropic_provider import AnthropicProvider
-from llm_providers.openai_provider import OpenAIProvider
-from llm_providers.xai_provider import XAIProvider
+from shared.llm_providers import Message
+from shared.llm_providers.anthropic_provider import AnthropicProvider
+from shared.llm_providers.openai_provider import OpenAIProvider
+from shared.llm_providers.xai_provider import XAIProvider
 
 
 logger = logging.getLogger(__name__)

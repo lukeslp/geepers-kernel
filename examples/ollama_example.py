@@ -16,9 +16,8 @@ Author: Luke Steuber
 """
 
 import sys
-sys.path.insert(0, '/home/coolhand/shared')
 
-from llm_providers import ProviderFactory, Message
+from shared.llm_providers import ProviderFactory, Message
 import base64
 
 
@@ -152,7 +151,7 @@ def example_factory_integration():
     print("\n=== Factory Integration ===")
 
     # Check capabilities
-    from llm_providers import PROVIDER_CAPABILITIES
+    from shared.llm_providers import PROVIDER_CAPABILITIES
 
     ollama_caps = PROVIDER_CAPABILITIES['ollama']
     print("Ollama capabilities:")
